@@ -1,0 +1,9 @@
+﻿Build started 2015-04-27 18:12:39.
+     1>Project "D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\Extra DirectXLibs\DirectXTK_Desktop_2013.vcxproj" on node 2 (Build target(s)).
+     1>Lib:
+         DirectXTK_Desktop_2013.vcxproj -> D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\Extra DirectXLibs\Bin\Desktop_2013\x64\Debug\DirectXTK.lib
+     1>Done Building Project "D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\Extra DirectXLibs\DirectXTK_Desktop_2013.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.05
