@@ -14,6 +14,7 @@ public:
 		//this->isCollectable = true;		
 	}
 
+	CollectableObject(){}
 	~CollectableObject(){}
 
 	//bool isCollectable(){ return isCollectable; }

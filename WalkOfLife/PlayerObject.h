@@ -63,7 +63,16 @@ protected:
 public:
 	PlayerObject(ID3D11Buffer *b, XMFLOAT3 pos, bool isActive, bool isStatic, BoundingOrientedBox bbox) : CollisionObject(b, pos, isActive, isStatic, bbox){
 		this->speed = 0.005;
+
+		origin = XMVectorSet(pos.x, pos.y, pos.z, 0); //0 för att det är en vektor
+		up = XMVectorSet(0, 1, 0, 0);
+		down = XMVectorSet(0, -1, 0, 0);
+		right = XMVectorSet(1, 0, 0, 0);
+		left = XMVectorSet(-1, 0, 0, 0);
 	}
+
+	PlayerObject(){}
+	~PlayerObject(){}
 
 	void Move(bool right);
 	void Jump();
@@ -167,9 +176,11 @@ public:
 
 		//}//RayTestTriangleInMesh
 
-		////dessa två är bara här för att virtuell mojset ska stämma överens
+		
 		
 	}
+
+	////dessa två är bara här för att virtuell mojset ska stämma överens
 	bool isCollectable(){ return false; }
-		bool isDeadly(){ return false; }
+	bool isDeadly(){ return false; }
 };

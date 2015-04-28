@@ -15,6 +15,7 @@ public:
 		this->bbox = bbox;
 	}
 
+	CollisionObject(){}
 	~CollisionObject(){
 
 	}

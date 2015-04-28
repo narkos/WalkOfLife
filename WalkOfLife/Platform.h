@@ -32,6 +32,7 @@ public:
 		vertices = verts; //vertiserna måste komma in i rätt ordning förhållande till hur CreateTriangleVector funktionen läser dem
 		CreateTriangles();
 	}
+	Platform(){}
 	~Platform(){}
 
 	/*bool isCollectable(){ return false; }

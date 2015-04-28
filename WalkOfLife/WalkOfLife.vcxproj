@@ -120,6 +120,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Obj.cpp" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="CollectableObject.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionObject.h" />
     <ClInclude Include="Counters.h" />
     <ClInclude Include="DirectionalLight.h" />
