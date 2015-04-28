@@ -2,19 +2,29 @@
 
 void PlayerObject::Move(bool right)
 {
+	
 	if (right)
 	{
+		if (this->momentum < 1)
+		{
+			this->momentum += 0.05;
+		}
 		
-		this->Translate(this->getSpeed(), 0.0, 0.0);
+		this->Translate(this->getSpeed() * momentum, 0.0, 0.0);
 		//this->Rotate(XMLoadFloat3(&XMFLOAT3(0,0,1)), this->xPos);
 		//this->Scale(5, 1, 1);
-		this->xPos += this->getSpeed();
+		this->xPos += this->getSpeed() * momentum;
 	}
 		
 	else
 	{
-		this->Translate(-this->getSpeed(), 0.0, 0.0);
-		this->xPos -= this->getSpeed();
+		if (this->momentum < 1)
+		{
+			this->momentum += 0.05;
+		}
+		
+		this->Translate(-this->getSpeed() * momentum, 0.0, 0.0);
+		this->xPos -= this->getSpeed() * momentum;
 	}
 }
 

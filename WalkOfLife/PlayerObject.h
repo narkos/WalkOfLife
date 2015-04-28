@@ -62,7 +62,8 @@ protected:
 	}
 public:
 	PlayerObject(ID3D11Buffer *b, XMFLOAT3 pos, bool isActive, bool isStatic, BoundingOrientedBox bbox) : CollisionObject(b, pos, isActive, isStatic, bbox){
-		this->speed = 0.5;
+		this->speed = 0.3;
+		this->momentum = 0.0;
 	}
 
 	void Move(bool right);
@@ -70,6 +71,8 @@ public:
 	float getSpeed();
 	float getJumpHeight();
 	bool jumping;
+	bool accelerating;
+	float momentum;
 
 	//void TestIntersect(CollectableObject cObj, int &currCoins, int &currTime){ //testar ifall man träffar ett specifikt CollectableObject och isåfall få dess värde
 	//	//ha nån if-sats som kollar vilka object som ligger i närheten så man inte behöver skicka in alla CollectableObjectsd

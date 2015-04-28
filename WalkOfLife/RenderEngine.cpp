@@ -617,6 +617,12 @@ void RenderEngine::Update(float dt){
 	input = theInput.detectInput(hWindow);
 	jump = theInput.detectJump(hWindow);
 
+	if (input == 0)
+	{
+		theCharacter->momentum = 0;
+
+	}
+
 	if (input == 1)
 	{
 		this->theCharacter->Move(false);
