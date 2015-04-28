@@ -444,8 +444,13 @@ int RenderEngine::Run(){
 		}
 		else{ //applikationen är fortfarande igång
 			gTimer.Tick();
-			Update(0.0f);
-			Render();
+			if ((gTimer.TotalTime() - time3) >= 0.01f)
+			{
+
+				Update(0.0f);
+				Render();
+				time3 = gTimer.TotalTime();
+			}
 			fpscounter();
 		}
 	}

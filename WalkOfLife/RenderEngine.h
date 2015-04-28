@@ -45,8 +45,8 @@ public:
 	virtual ~RenderEngine();
 
 	int Run();
-	int bajs = 2;
-	
+	float time3;
+
 	void SetViewport();
 	virtual bool Init();
 	void Update(float dt);
