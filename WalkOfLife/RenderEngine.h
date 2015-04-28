@@ -45,6 +45,7 @@ public:
 	virtual ~RenderEngine();
 
 	int Run();
+	int bajs = 2;
 	
 	void SetViewport();
 	virtual bool Init();
