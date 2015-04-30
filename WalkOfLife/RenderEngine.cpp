@@ -77,8 +77,21 @@ bool RenderEngine::Init(){
 	ImportObj("Objects/mapPart5.obj", "Objects/mapPart5.mtl", gDevice, false);
 	ImportObj("Objects/mapPart6.obj", "Objects/mapPart6.mtl", gDevice, false);
 	ImportObj("Objects/mapPart7.obj", "Objects/mapPart7.mtl", gDevice, false);
-	return true; //om båda funkade så returnera true (y)
+	
 
+
+	//LIGHT TEST ZONE BITCHES
+	float l1Int = 1.0f;
+	XMFLOAT3 l1Pos = XMFLOAT3(0.0f, 1.0f, -2.0f);
+	XMFLOAT4 l1Amb = XMFLOAT4(1.0f, 1.0f, 1.0f,1.0f);
+	XMFLOAT4 l1Diff = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	XMFLOAT4 l1Spec = XMFLOAT4(0.5f, 0.2f, 0.2f, 1.0f);
+	XMFLOAT3 l1Dir = XMFLOAT3(0.0f, -50.0f, 30.0f);
+
+	testLight = new Light(l1Int, l1Pos, true, true);
+	testLight->CreateDirLight(gDevice, l1Amb, l1Diff, l1Spec, l1Dir);
+
+	return true; //om båda funkade så returnera true (y)
 }
 
 // INITIALIZE WINDOW
@@ -660,6 +673,9 @@ void RenderEngine::Release(){
 	gVertexShader->Release();
 	gPixelShader->Release();
 	gDeviceContext->Release();
+
+	//Kill Lights
+	delete testLight;
 }
 
 void RenderEngine::ImportObj(char* geometryFileName, char* materialFileName, ID3D11Device* gDev, bool player){// , bool isStatic, XMMATRIX startPosMatrix){

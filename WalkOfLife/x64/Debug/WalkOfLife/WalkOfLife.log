@@ -1,0 +1,28 @@
+﻿Build started 2015-04-29 21:33:41.
+     1>Project "D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\WalkOfLife\\" /Fd"x64\Debug\WalkOfLife\vc120.pdb" /Gd /TP /errorReport:prompt RenderEngine.cpp
+         RenderEngine.cpp
+     1>d:\skapa\-gameprojects\litet spelprojekt bth\engine\walkoflife\walkoflife\PlayerObject.h(65): warning C4305: '=' : truncation from 'double' to 'float'
+         C:\Program Files (x86)\Windows Kits\8.1\Include\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+     1>RenderEngine.cpp(146): warning C4244: '=' : conversion from 'UINT' to 'FLOAT', possible loss of data
+     1>RenderEngine.cpp(147): warning C4244: '=' : conversion from 'UINT' to 'FLOAT', possible loss of data
+     1>RenderEngine.cpp(172): warning C4244: '=' : conversion from 'float' to 'UINT', possible loss of data
+     1>RenderEngine.cpp(478): warning C4305: '+=' : truncation from 'double' to 'float'
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\x64\Debug\WalkOfLife.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\x64\Debug\WalkOfLife.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\x64\Debug\WalkOfLife.lib" /MACHINE:X64 x64\Debug\WalkOfLife\GameTimer.obj
+         x64\Debug\WalkOfLife\Input.obj
+         x64\Debug\WalkOfLife\Light.obj
+         x64\Debug\WalkOfLife\Obj.obj
+         x64\Debug\WalkOfLife\Physics.obj
+         x64\Debug\WalkOfLife\PlayerObject.obj
+         x64\Debug\WalkOfLife\RenderEngine.obj
+         x64\Debug\WalkOfLife\Counters.obj
+         x64\Debug\WalkOfLife\WinMain.obj
+         "D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\Extra DirectXLibs\Bin\Desktop_2013\x64\Debug\DirectXTK.lib"
+         WalkOfLife.vcxproj -> D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\x64\Debug\WalkOfLife.exe
+     1>Done Building Project "D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.23

@@ -23,6 +23,7 @@
 #include "GameTimer.h"
 #include "Counters.h"
 #include "Obj.h"
+#include "Light.h"
 #include "Extra DirectXLibs\Inc\DDSTextureLoader.h"
 #include "Extra DirectXLibs\Inc\SpriteFont.h"
 #include "Extra DirectXLibs\Inc\SpriteBatch.h"
@@ -61,6 +62,10 @@ public:
 	Counters gCounter;
 	PlayerObject* theCharacter;
 	std::wstring mainwname;
+
+	Light* testLight;
+	
+
 
 	//Import Functions
 	void ImportObj(char* geometryFileName, char* materialFileName, ID3D11Device* gDev, bool player);// , bool isStatic, XMMATRIX startPosMatrix);
