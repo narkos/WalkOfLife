@@ -1,4 +1,9 @@
 #pragma once
+
+#ifndef PLAYEROBJECT_H
+#define PLAYEROBJECT_H
+#endif
+
 #include "CollisionObject.h"
 #include "CollectableObject.h"
 #include "Platform.h"
@@ -149,7 +154,7 @@ public:
 			vector<Triangle> tris = pObj.GetTriangles();
 			for each (Triangle t in tris)
 			{
-				if (Intersects(origin, ray, t.x, t.y, t.z, rayLength) == true){ //står spelaren på denna triangeln?
+				if (DirectX::TriangleTests::Intersects(origin, ray, t.x, t.y, t.z, rayLength) == true){ //står spelaren på denna triangeln?
 					//ta reda på vart på triangeln spelaren står, genom att använda worldpos mojs
 					//hur hittar vi positionen mellan två punkter i worldspace?
 					Vec e1, e2, s;
@@ -171,6 +176,7 @@ public:
 					break;
 				}
 			}
+			return 0;
 		}
 		else return 0; //ändra denna eventuellt
 

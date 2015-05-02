@@ -1,7 +1,14 @@
 #pragma once
 
+#ifndef GAMEOBJECT_H
+#define GAMEOBJECT_H
+#endif
 #include "Entity.h"
 
+
+struct Triangle{
+	XMVECTOR x, y, z;
+};
 
 class GameObject : public Entity{
 public:
@@ -27,10 +34,9 @@ public:
 
 	ID3D11Buffer *vertexBuffer;
 	ID3D11Buffer *indexBuffer;
+
 protected:
-	struct Triangle{
-		XMVECTOR x, y, z;
-	};
+
 	//texture
 	
 };

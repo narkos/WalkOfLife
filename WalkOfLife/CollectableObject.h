@@ -1,3 +1,4 @@
+#pragma once
 #include "CollisionObject.h"
 
 class CollectableObject : public CollisionObject{

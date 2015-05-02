@@ -1,4 +1,7 @@
 #pragma once
+#ifndef ENTITY_H
+#define ENTITY_H
+#endif
 
 #include <DirectXMath.h>
 #include <DirectXMathMatrix.inl>
@@ -9,7 +12,7 @@
 
 using namespace DirectX;
 using namespace std;
-using namespace DirectX::TriangleTests;
+//using namespace DirectX::TriangleTests;
 
 class Entity{
 protected:

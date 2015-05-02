@@ -612,27 +612,25 @@ void RenderEngine::Update(float dt){
 	input = theInput.detectInput(hWindow);
 	jump = theInput.detectJump(hWindow);
 
+	theCollision.TestCollision(gamePlatforms);
+
 	if (input == 1)
 	{
-		this->theCharacter->Move(false);
+		this->theCharacter->Move(false); //left
 	}
 
 	else if (input == 2)
 	{
-		this->theCharacter->Move(true);
+		this->theCharacter->Move(true); //right
 
 	}
 
-	if (jump && thePhysics.onPlatform)
+	if (jump) //om grounded och man har klickat in jump
 	{
 		this->thePhysics.Jump(theCharacter);
 		thePhysics.onPlatform = false;
 	}
-	/*for each (Platform var in gamePlatforms)
-	{
-		thePhysics.onPlatform = theCharacter->TestIntersect(var);
-	}*/
-	//this->theCharacter->Move(true);
+
 	thePhysics.Gravitation(theCharacter);
 	theCharacter->CalculateWorld();
 }
@@ -666,6 +664,8 @@ void RenderEngine::ImportObj(char* geometryFileName, char* materialFileName, ID3
 	{
 		theCharacter = new PlayerObject(*objectTest.GetVertexBuffer(), XMFLOAT3(0, 0, 0), true, false, BoundingOrientedBox(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), XMFLOAT4(1, 1, 1, 1)));
 		theCharacter->nrElements = objectTest.GetNrElements();
+		Collision tempC(*theCharacter);
+		theCollision = tempC;
 		//gameObjects.push_back(*theCharacter);
 	}
 

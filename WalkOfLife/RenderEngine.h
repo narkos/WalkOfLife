@@ -17,6 +17,7 @@
 
 //#include "GameObject.h"
 #include "Physics.h"
+#include "Collision.h"
 #include "Input.h"
 #include "Platform.h"
 #include "PlayerObject.h"
@@ -57,6 +58,7 @@ public:
 	
 	OBJ theOBJ;
 	Physics thePhysics;
+	Collision theCollision;
 	GameTimer gTimer;
 	Counters gCounter;
 	PlayerObject* theCharacter;
