@@ -2,7 +2,7 @@
 
 
 
-void Light::CreateDirLight(ID3D11Device* dev,
+void LightClass::CreateDirLight(ID3D11Device* dev,
 	XMFLOAT4 amb,
 	XMFLOAT4 diff,
 	XMFLOAT4 spec,
@@ -18,7 +18,7 @@ void Light::CreateDirLight(ID3D11Device* dev,
 	CreateLightBuffer(dev);
 }
 
-void Light::CreateLightBuffer(ID3D11Device* dev)
+void LightClass::CreateLightBuffer(ID3D11Device* dev)
 {
 
 	D3D11_BUFFER_DESC lbuffDesc;
@@ -43,7 +43,7 @@ void Light::CreateLightBuffer(ID3D11Device* dev)
 }
 
 
-void Light::Render(ID3D11Device* dev, ID3D11DeviceContext* devcon)
+void LightClass::Render(ID3D11Device* dev, ID3D11DeviceContext* devcon)
 {
 
 	if (lightType == 1)
@@ -60,7 +60,7 @@ void Light::Render(ID3D11Device* dev, ID3D11DeviceContext* devcon)
 
 }
 
-Light::~Light()
+LightClass::~LightClass()
 {
 	lightBuffer->Release();
 }
