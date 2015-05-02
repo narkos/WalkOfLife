@@ -81,7 +81,7 @@ bool RenderEngine::Init(){
 
 
 	//LIGHT TEST ZONE BITCHES
-	float l1Int = 1.0f;
+	/*float l1Int = 1.0f;
 	XMFLOAT3 l1Pos = XMFLOAT3(0.0f, 1.0f, -2.0f);
 	XMFLOAT4 l1Amb = XMFLOAT4(1.0f, 1.0f, 1.0f,1.0f);
 	XMFLOAT4 l1Diff = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -89,7 +89,7 @@ bool RenderEngine::Init(){
 	XMFLOAT3 l1Dir = XMFLOAT3(0.0f, -50.0f, 30.0f);
 
 	testLight = new Light(l1Int, l1Pos, true, true);
-	testLight->CreateDirLight(gDevice, l1Amb, l1Diff, l1Spec, l1Dir);
+	testLight->CreateDirLight(gDevice, l1Amb, l1Diff, l1Spec, l1Dir);*/
 
 	return true; //om båda funkade så returnera true (y)
 }

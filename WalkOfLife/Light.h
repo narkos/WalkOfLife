@@ -40,20 +40,22 @@ struct Light
 
 class LightClass : public Entity{
 protected:	
-	float intensity;
+	
 	ID3D11Buffer *lightBuffer;
 	
 
 
 
 public:
-	LightClass(float intensity, XMFLOAT3 pos, bool isActive, bool isStatic) : Entity(pos, isActive, isStatic){
-		this->intensity = intensity;
-	}
+	LightClass(XMFLOAT3 pos, bool isActive, bool isStatic) : Entity(pos, isActive, isStatic){};
 	~LightClass();
+
+	Light lightObject;
 
 	virtual void CreateLightBuffer(ID3D11Device* dev);
 
+	void ToggleActive();
+	void Render(ID3D11Device* dev, ID3D11DeviceContext* devcon);
 
 };
 

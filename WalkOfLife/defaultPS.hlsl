@@ -10,17 +10,6 @@ SamplerState sampAni
 	AdressV = WRAP;
 };
 
-
-cbuffer LightHolder : register(c0)
-{
-	//Material	inMat;
-	float3		inEyePos;
-	float		pad;
-	DirLight	inDir;
-	PointLight	inPoint;
-	SpotLight	inSpot;
-}
-
 struct VS_OUT
 {
 	float3 Pos		: POSITION;
@@ -33,7 +22,7 @@ float4 PS_main(VS_OUT input) : SV_Target
 
 {
 	input.tunormal = normalize(input.tunormal);
-	float3 objtoEye = normalize()
+	//float3 objtoEye = normalize()
 	float4 Texdiffuse = txDiffuse.Sample(sampAni, input.Tex);
 
 		return Texdiffuse;

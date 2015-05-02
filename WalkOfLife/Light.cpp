@@ -2,22 +2,32 @@
 
 
 
-void LightClass::CreateDirLight(ID3D11Device* dev,
-	XMFLOAT4 amb,
-	XMFLOAT4 diff,
-	XMFLOAT4 spec,
-	XMFLOAT3 direction)
+LightClass::LightClass(XMFLOAT3 pos, bool isActive, bool isStatic) : Entity(pos, isActive, isStatic)
 {
-	dLightData.ambient = amb;
-	dLightData.diffuse = diff;
-	dLightData.specular = spec;
-	dLightData.direction = direction;
-	dLightData.shaderpadding = 0.0f;
-	this->lightType = 1;
+
+	lightObject.Position = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
+	lightObject.Color(1.0f, 1.0f, 1.0f, 1.0f);
+	lightObject.Type(l_Directional);
+	lightObject.Active(1);
+	lightObject.Direction(0.0f, 0.0f, 1.0f, 0.0f);
+	lightObject.SpotConeAngle(XM_PIDIV2);
+	lightObject.AttConst(1.0f);
+	lightObject.AttLinear(0.0f);
+	lightObject.AttQuadratic(0.0f);
 	
-	CreateLightBuffer(dev);
+
+
 }
 
+void LightClass::ToggleActive()
+{
+	if (lightObject.Active != 0)
+		lightObject.Active = 0;
+	else
+		lightObject.Active = 1;
+
+	return;
+}
 void LightClass::CreateLightBuffer(ID3D11Device* dev)
 {
 
@@ -27,36 +37,27 @@ void LightClass::CreateLightBuffer(ID3D11Device* dev)
 	lbuffDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	lbuffDesc.CPUAccessFlags = 0;
 	lbuffDesc.MiscFlags = 0;
-	if (lightType == 1)
-		lbuffDesc.ByteWidth = sizeof(DirLight);
-	else if (lightType == 2)
-		lbuffDesc.ByteWidth = sizeof(PointLight);
-	else if (lightType == 3)
-		lbuffDesc.ByteWidth = sizeof(SpotLight);
-	else
-		return;
-
-	if (lightType != 0)
-		HRESULT hr = dev->CreateBuffer(&lbuffDesc, NULL, &lightBuffer);
+	lbuffDesc.ByteWidth = sizeof(Light);
 	
-
+	HRESULT hr = dev->CreateBuffer(&lbuffDesc, NULL, &lightBuffer);
+	
 }
 
 
 void LightClass::Render(ID3D11Device* dev, ID3D11DeviceContext* devcon)
 {
 
-	if (lightType == 1)
-		devcon->UpdateSubresource(lightBuffer, 0, NULL, &dLightData, 0, 0);
-	else if (lightType == 2)
-		devcon->UpdateSubresource(lightBuffer, 0, NULL, &dLightData, 0, 0);
-	else if (lightType == 3)
-		devcon->UpdateSubresource(lightBuffer, 0, NULL, &dLightData, 0, 0);
-	else
-		return;
+	//if (lightType == 1)
+	//	devcon->UpdateSubresource(lightBuffer, 0, NULL, &dLightData, 0, 0);
+	//else if (lightType == 2)
+	//	devcon->UpdateSubresource(lightBuffer, 0, NULL, &dLightData, 0, 0);
+	//else if (lightType == 3)
+	//	devcon->UpdateSubresource(lightBuffer, 0, NULL, &dLightData, 0, 0);
+	//else
+	//	return;
 
-	if (lightType != 0)
-		devcon->PSSetConstantBuffers(0, 1, &lightBuffer);
+	//if (lightType != 0)
+	//	devcon->PSSetConstantBuffers(0, 1, &lightBuffer);
 
 }
 

@@ -32,7 +32,7 @@ struct MatInfo
 
 cbuffer MaterialProperties : register(b0)
 {
-	Materials Material;
+	MatInfo Material;
 }
 
 struct LightingResult
@@ -68,7 +68,7 @@ float4 calcSpecular(Light light, float3 V, float3 L, float3 N)
 {
 	//Phong
 	float3 R = normalize(reflect(-L, N));
-	float RdotV = max(0, dot(N, H));
+	float RdotV = max(0, dot(N, V));
 
 	// Blin Phong
 	float3 H = normalize(L + V);
@@ -80,7 +80,7 @@ float4 calcSpecular(Light light, float3 V, float3 L, float3 N)
 
 float calcAtt(Light light, float distance)
 {
-
+	return 1.0f / (light.AttConst + light.AttLinear * distance + light.AttQuadratic * (distance*distance));
 }
 
 
@@ -89,8 +89,15 @@ LightingResult createPointLight(Light light, float3 V, float4 P, float3 N)
 
 }
 
-LightingResult createDirectional(Light, light, float3 V, float4 P, float3 N)
+LightingResult createDirectional(Light light, float3 V, float4 P, float3 N)
 {
+	LightingResult result;
+	float3 L = -light.Direction.xyz;
+
+	result.Diffuse = calcDiffuse(light, L, N);
+	result.Specular = calcSpecular(light, V, L, N);
+
+	return result;
 
 }
 
@@ -106,5 +113,40 @@ LightingResult createSpotLight(Light light, float3 V, float4 P, float3 N)
 
 LightingResult ComputeLighting(float4 P, float3 N)
 {
+	LightingResult finalResult = { { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f } };
+	
+	float3 V = normalize(CamPosition - P).xyz;
 
+		[unroll]
+	for (int i = 0; i < MAX_LIGHTS; ++i)
+	{
+		LightingResult result = { { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f } };
+		if (!lights[i].Active) continue; // Continue if light isn't active
+
+		switch (lights[i].Type)
+		{
+		case L_DIRECTIONAL:
+		{
+			result = createDirectional(lights[i], V, P, N);
+		}
+		break;
+		case L_POINT:
+		{
+			result = createPointLight(lights[i], V, P, N);
+		}
+		break;
+		case L_SPOT:
+		{
+			result = createSpotLight(lights[i], V, P, N);
+		}
+		break;
+
+		}
+		finalResult.Diffuse += result.Diffuse;
+		finalResult.Specular += result.Specular;
+	}
+	finalResult.Diffuse = saturate(finalResult.Diffuse);
+	finalResult.Specular = saturate(finalResult.Specular);
+
+	return finalResult;
 }
