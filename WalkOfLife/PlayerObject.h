@@ -148,6 +148,15 @@ public:
 		else return false;
 	}
 
+	void Translate(float x, float y, float z){
+		pos = XMMatrixTranslation(this->xPos + x, this->yPos + y, z);
+		origin = XMVectorSet(xPos, yPos, 0, 0);
+		
+		left = XMVectorSet((XMVectorGetX(left) + xPos), (XMVectorGetY(left) + yPos), 0, 0);
+		right = XMVectorSet((XMVectorGetX(right) + xPos), (XMVectorGetY(right) + yPos), 0, 0);
+		up = XMVectorSet((XMVectorGetX(up) + xPos), (XMVectorGetY(up) + yPos), 0, 0);
+		down = XMVectorSet((XMVectorGetX(down) + xPos), (XMVectorGetY(down) + yPos), 0, 0);
+	}
 
 	float GetYValueOnMesh(Platform pObj, XMVECTOR ray, float rayLength){ //kör först funktionen TestDown tex. Hämtar det Y-värde som spelaren ska stå på
 		if (TestDown(pObj, rayLength)){

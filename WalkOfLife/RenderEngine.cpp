@@ -614,7 +614,7 @@ void RenderEngine::Update(float dt){
 
 	theCollision.TestCollision(gamePlatforms);
 
-	if (input == 1)
+	if (input == 1 && theCollision.leftValid()==true)
 	{
 		this->theCharacter->Move(false); //left
 	}
@@ -625,7 +625,7 @@ void RenderEngine::Update(float dt){
 
 	}
 
-	if (jump) //om grounded och man har klickat in jump
+	if (jump && theCollision.isGrounded()) //om grounded och man har klickat in jump
 	{
 		this->thePhysics.Jump(theCharacter);
 		thePhysics.onPlatform = false;
@@ -662,7 +662,7 @@ void RenderEngine::ImportObj(char* geometryFileName, char* materialFileName, ID3
 	OutputDebugStringA("\n");
 	if (player)
 	{
-		theCharacter = new PlayerObject(*objectTest.GetVertexBuffer(), XMFLOAT3(0, 0, 0), true, false, BoundingOrientedBox(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), XMFLOAT4(1, 1, 1, 1)));
+		theCharacter = new PlayerObject(*objectTest.GetVertexBuffer(), XMFLOAT3(0, 6, 0), true, false, BoundingOrientedBox(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), XMFLOAT4(1, 0, 0, 0)));
 		theCharacter->nrElements = objectTest.GetNrElements();
 		Collision tempC(*theCharacter);
 		theCollision = tempC;

@@ -11,13 +11,13 @@ void Collision::TestCollision(vector<Platform> platforms){
 
 	for each (Platform p in platforms)
 	{
-		if (player.TestRight(p, 10) == true){ //den träffa nått till höger
+		if (player.TestRight(p, 1) == true){ //den träffa nått till höger
 			canGoRight = false;
 		}
-		if (player.TestLeft(p, 10) == true){ //borde nog vara mindre än 10, men testa!
+		if (player.TestLeft(p, 1) == true){ //borde nog vara mindre än 10, men testa!
 			canGoLeft = false;
 		}
-		if (player.TestUp(p, 10) == true){ 
+		if (player.TestUp(p, 1) == true){ 
 			canGoUp = false;
 		}
 
