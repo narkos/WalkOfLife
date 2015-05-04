@@ -15,11 +15,11 @@ Physics::~Physics()
 
 void Physics::Gravitation(PlayerObject *theCharacter)
 {
-	if (theCharacter->yPos <=-4)
+	if (theCharacter->yPos <=-6)
 	{
 		this->onPlatform = true;
 	}
-	if (theCharacter->yPos >-4 || this->upforce < 0)
+	if (theCharacter->yPos >-6 || this->upforce < 0)
 	{
 		theCharacter->Translate(0.0, this->upforce - this->downforce, 0.0);
 		theCharacter->yPos -= this->downforce + this->upforce;

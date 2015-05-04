@@ -3,21 +3,21 @@
 void Collision::TestCollision(vector<Platform> platforms){
 
 
-	bool canGoRight = true;
-	bool canGoLeft = true;
-	bool canGoUp = true;
+	this->canGoRight = true;
+	this->canGoLeft = true;
+	this->canGoUp = true;
 
-	bool onGround = false;	
+	this->onGround = false;	
 
 	for each (Platform p in platforms)
 	{
-		if (player.TestRight(p, 1) == true){ //den träffa nått till höger
+		if (player.TestRight(p, 10000) == true){ //den träffa nått till höger
 			canGoRight = false;
 		}
-		if (player.TestLeft(p, 1) == true){ //borde nog vara mindre än 10, men testa!
+		if (player.TestLeft(p, 10000) == true){ //borde nog vara mindre än 10, men testa!
 			canGoLeft = false;
 		}
-		if (player.TestUp(p, 1) == true){ 
+		if (player.TestUp(p, 10000) == true){ 
 			canGoUp = false;
 		}
 
