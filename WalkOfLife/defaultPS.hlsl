@@ -12,18 +12,18 @@ SamplerState sampAni
 
 struct VS_OUT
 {
-	float4 Pos		: POSITION;
+	float4 Pos		: SV_POSITION;
 	float2 Tex		: TEXCOORD;
-	float4 tunormal : NORMAL;
-	float4 wPos		: SV_POSITION;
+	float3 Nor		: NORMAL;
+	float4 wPos		: POSITION;
 };
 
 float4 PS_main(VS_OUT input) : SV_Target
 
 {
-	LightingResult lightCalcs = ComputeLighting(input.wPos, normalize(input.tunormal));
+	LightingResult lightCalcs = ComputeLighting(input.wPos, normalize(input.Nor));
 
-	input.tunormal = normalize(input.tunormal);
+	input.Nor = normalize(input.Nor);
 	//float3 objtoEye = normalize()
 	float4 Texdiffuse = txDiffuse.Sample(sampAni, input.Tex);
 

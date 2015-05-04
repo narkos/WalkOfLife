@@ -77,8 +77,9 @@ bool RenderEngine::Init(){
 	ImportObj("Objects/mapPart5.obj", "Objects/mapPart5.mtl", gDevice, false);
 	ImportObj("Objects/mapPart6.obj", "Objects/mapPart6.mtl", gDevice, false);
 	ImportObj("Objects/mapPart7.obj", "Objects/mapPart7.mtl", gDevice, false);
-	
+	ImportObj("Objects/mapPart7.obj", "Objects/mapPart7.mtl", gDevice, false);
 
+	
 
 	//LIGHT TEST ZONE BITCHES
 	/*float l1Int = 1.0f;
@@ -98,11 +99,11 @@ bool RenderEngine::Init(){
 
 	testLight[1] = snoppe;
 	snoppe.lightObject.Type = 2;
-	testLight[1].lightObject.Position = XMFLOAT4(-4.0f, 0.0f, 0.5f, 0.0f);
+	testLight[1].lightObject.Position = XMFLOAT4(-4.0f, 10.0f, 50.0f, 1.0f);
 	testLight[1].lightObject.Color = XMFLOAT4(Colors::White);
 	testLight[1].lightObject.AttConst = 1.0f;
-	testLight[1].lightObject.AttLinear = 0.10f;
-	testLight[1].lightObject.AttQuadratic = 0.0000f;
+	testLight[1].lightObject.AttLinear = 0.001f;
+	testLight[1].lightObject.AttQuadratic = 0.00001f;
  	globalAmb = XMFLOAT4(Colors::Black);
 
 	D3D11_BUFFER_DESC lbuffDesc;
@@ -498,7 +499,8 @@ int RenderEngine::Run(){
 
 void RenderEngine::Render(){
 	static float rot = 0.00f;
-	
+	UINT32 vertexSize = sizeof(float) * 8;
+	UINT32 offset = 0;
 	rot += 0.01;
 	float clearColor[] = { 0.15f,0.6f,1.0f, 0.8f };
 	gDeviceContext->ClearRenderTargetView(gBackRufferRenderTargetView, clearColor);
@@ -510,24 +512,31 @@ void RenderEngine::Render(){
 	//WORLD
 	XMMATRIX YRotation = XMMatrixRotationY(rot);
 	// Sets camera pos and angle
-	XMMATRIX CamView = XMMatrixLookAtLH(XMVectorSet(camxPos, 4.0f, -10.0f, 1.0f), XMVectorSet(camxPos, camyPos, 0.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0, 0.0f));
+	XMMATRIX CamView = XMMatrixLookAtLH(XMVectorSet(camxPos, 4.0f, -5.0f, 1.0f), XMVectorSet(camxPos, camyPos, 0.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0, 0.0f));
 	XMMATRIX CamProjection = XMMatrixPerspectiveFovLH(3.14f*(0.45f), 640.0f / 480.0f, 0.5f, 50.0f);
 	XMMATRIX identityM = XMMatrixIdentity();
-	XMMATRIX WorldInv = XMMatrixInverse(nullptr, YRotation);
-	identityM = XMMatrixTranslation(rot, 1, 1);
-	World WorldMatrix1;
+	XMMATRIX WorldInv = XMMatrixInverse(nullptr, XMMatrixIdentity());
 
-	XMStoreFloat4x4(&WorldMatrix1.View, XMMatrixTranspose(CamView));
-	XMStoreFloat4x4(&WorldMatrix1.Projection, XMMatrixTranspose(CamProjection));
-	XMStoreFloat4x4(&WorldMatrix1.WorldSpace, XMMatrixTranspose(identityM));
-	XMStoreFloat4x4(&WorldMatrix1.InvWorld, XMMatrixTranspose(WorldInv));
+	//identityM = XMMatrixTranslation(rot, 1, 1);
+	World perObjCBData;
+
+	XMMATRIX WVP;
+	WVP = identityM* CamView*CamProjection;
+
+
+	XMStoreFloat4x4(&perObjCBData.WVP, XMMatrixTranspose(WVP));
+	XMStoreFloat4x4(&perObjCBData.View, XMMatrixTranspose(CamView));
+	XMStoreFloat4x4(&perObjCBData.Projection, XMMatrixTranspose(CamProjection));
+	XMStoreFloat4x4(&perObjCBData.WorldSpace, XMMatrixTranspose(XMMatrixIdentity()));
+	XMStoreFloat4x4(&perObjCBData.InvWorld, XMMatrixTranspose(WorldInv));
 
 	
-	gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &WorldMatrix1, 0, 0);
+	gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &perObjCBData, 0, 0);
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
 	
-	gDeviceContext->PSSetConstantBuffers(1, 1, &lightConstBuff);
 
+	gDeviceContext->PSSetConstantBuffers(1, 1, &lightConstBuff);
+	
 
 	////////////LIGHTS
 
@@ -536,10 +545,7 @@ void RenderEngine::Render(){
 
 	for each (GameObject var in gamePlatforms)
 	{
-		UINT32 vertexSize = sizeof(float) * 8;
-		UINT32 offset = 0;
-
-		gDeviceContext->PSSetShaderResources(0, 1, &ddsTex1);
+			gDeviceContext->PSSetShaderResources(0, 1, &ddsTex1);
 	
 		gDeviceContext->IASetInputLayout(gVertexLayout);
 		gDeviceContext->IASetVertexBuffers(0, 1, &var.vertexBuffer, &vertexSize, &offset);
@@ -550,15 +556,20 @@ void RenderEngine::Render(){
 		gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 		
 		var.CalculateWorld();
-		var.world = XMMatrixTranspose(var.world);
-		gDeviceContext->UpdateSubresource(cWorld, 0, NULL, &var.world, 0, 0);
-		gDeviceContext->VSSetConstantBuffers(1, 1, &cWorld);
+		XMStoreFloat4x4(&perObjCBData.InvWorld, XMMatrixTranspose(XMMatrixInverse(nullptr, var.world)));
+		XMStoreFloat4x4(&perObjCBData.WorldSpace, XMMatrixTranspose(var.world));
+		WVP = XMMatrixIdentity();
+		WVP = var.world * CamView *CamProjection;
+
+		XMStoreFloat4x4(&perObjCBData.WVP, XMMatrixTranspose(WVP));
+
+		gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &perObjCBData, 0, 0);
+		gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
 
 		gDeviceContext->Draw(var.nrElements * 3, 0);
 		}
 
-	UINT32 vertexSize = sizeof(float)* 8;
-	UINT32 offset = 0;
+
 
 	gDeviceContext->PSSetShaderResources(0, 1, &ddsTex1);
 
@@ -569,14 +580,29 @@ void RenderEngine::Render(){
 	gDeviceContext->HSSetShader(nullptr, nullptr, 0);
 	gDeviceContext->DSSetShader(nullptr, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
+
+	theCharacter->CalculateWorld();
+	
+	
+	WVP = XMMatrixIdentity();
+	WVP = theCharacter->world * CamView *CamProjection;
+	XMStoreFloat4x4(&perObjCBData.InvWorld, XMMatrixTranspose(XMMatrixInverse(nullptr, theCharacter->world)));
 	theCharacter->world = XMMatrixTranspose(theCharacter->world);
-	gDeviceContext->UpdateSubresource(cWorld, 0, NULL, &theCharacter->world, 0, 0);
-	gDeviceContext->VSSetConstantBuffers(1, 1, &cWorld);
+
+	XMStoreFloat4x4(&perObjCBData.WVP, XMMatrixTranspose(WVP));
+	XMStoreFloat4x4(&perObjCBData.WorldSpace, theCharacter->world);
+
+	XMStoreFloat4x4(&perObjCBData.InvWorld, XMMatrixTranspose(XMMatrixInverse(nullptr, theCharacter->world)));
+
+	gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &perObjCBData, 0, 0);
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
+
+
+	/*gDeviceContext->UpdateSubresource(cWorld, 0, NULL, &theCharacter->world, 0, 0);
+	gDeviceContext->VSSetConstantBuffers(1, 1, &cWorld);*/
 	gDeviceContext->Draw(theCharacter->nrElements * 3, 0);
 
-	/*UINT32 vertexSize = sizeof(float)* 8;
-	UINT32 offset = 0;*/
-
+	
 	//gDeviceContext->PSSetShaderResources(0, 1, &ddsTex1);
 
 	//gDeviceContext->IASetInputLayout(gVertexLayout);
