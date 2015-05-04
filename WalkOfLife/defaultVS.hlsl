@@ -9,12 +9,6 @@ cbuffer World : register (c0)
 	matrix WVP;
 };
 
-cbuffer charWorld : register(c1)
-{
-	matrix world;
-};
-
-
 struct VS_IN
 {
 	float3 Pos : POSITION;
@@ -27,7 +21,7 @@ struct VS_OUT
 {
 	float4 Pos		: SV_POSITION;
 	float2 Tex		: TEXCOORD;
-	float3 Nor	: NORMAL;
+	float3 Nor		: NORMAL;
 	float4 wPos		: POSITION;
 
 };

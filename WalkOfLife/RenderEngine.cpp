@@ -91,19 +91,20 @@ bool RenderEngine::Init(){
 
 
 
-	testLight[0] = LightClass(l_Directional, XMFLOAT3(0.4f, -0.7f, -1.0f), true, true);
+	testLight[0] = LightClass(l_Directional, XMFLOAT3(0.0f, -1.0f, 0.0f), true, true);
 	testLight[0].lightObject.Color = XMFLOAT4(Colors::Purple);
-	testLight[0].ToggleActive();
+	/*testLight[0].ToggleActive();*/
 
 	LightClass snoppe(l_Point, XMFLOAT3(1.0f, 1.0f, 0.0f), true, true);
 
 	testLight[1] = snoppe;
 	snoppe.lightObject.Type = 2;
-	testLight[1].lightObject.Position = XMFLOAT4(-4.0f, 10.0f, 50.0f, 1.0f);
+	testLight[1].lightObject.Position = XMFLOAT4(-4.0f, -10.0f, 50.0f, 1.0f);
 	testLight[1].lightObject.Color = XMFLOAT4(Colors::White);
 	testLight[1].lightObject.AttConst = 1.0f;
 	testLight[1].lightObject.AttLinear = 0.001f;
 	testLight[1].lightObject.AttQuadratic = 0.00001f;
+	testLight[1].ToggleActive();
  	globalAmb = XMFLOAT4(Colors::Black);
 
 	D3D11_BUFFER_DESC lbuffDesc;
@@ -512,7 +513,7 @@ void RenderEngine::Render(){
 	//WORLD
 	XMMATRIX YRotation = XMMatrixRotationY(rot);
 	// Sets camera pos and angle
-	XMMATRIX CamView = XMMatrixLookAtLH(XMVectorSet(camxPos, 4.0f, -5.0f, 1.0f), XMVectorSet(camxPos, camyPos, 0.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0, 0.0f));
+	XMMATRIX CamView = XMMatrixLookAtLH(XMVectorSet(camxPos, 4.0f, -2.0f, 1.0f), XMVectorSet(camxPos, camyPos, 0.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0, 0.0f));
 	XMMATRIX CamProjection = XMMatrixPerspectiveFovLH(3.14f*(0.45f), 640.0f / 480.0f, 0.5f, 50.0f);
 	XMMATRIX identityM = XMMatrixIdentity();
 	XMMATRIX WorldInv = XMMatrixInverse(nullptr, XMMatrixIdentity());
@@ -598,48 +599,11 @@ void RenderEngine::Render(){
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
 
 
-	/*gDeviceContext->UpdateSubresource(cWorld, 0, NULL, &theCharacter->world, 0, 0);
-	gDeviceContext->VSSetConstantBuffers(1, 1, &cWorld);*/
+
 	gDeviceContext->Draw(theCharacter->nrElements * 3, 0);
 
-	
-	//gDeviceContext->PSSetShaderResources(0, 1, &ddsTex1);
-
-	//gDeviceContext->IASetInputLayout(gVertexLayout);
-	//gDeviceContext->IASetVertexBuffers(0, 1, &theCharacter->vertexBuffer, &vertexSize, &offset);
-	//gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
-	//gDeviceContext->HSSetShader(nullptr, nullptr, 0);
-	//gDeviceContext->DSSetShader(nullptr, nullptr, 0);
-	//gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
-
-	//theCharacter->world = XMMatrixTranspose(theCharacter->world);
-	//gDeviceContext->UpdateSubresource(cWorld, 0, NULL, &theCharacter->world, 0, 0);
-	//gDeviceContext->VSSetConstantBuffers(1, 1, &cWorld);
-
-	//gDeviceContext->Draw(theCharacter->nrElements * 3, 0);
-
-
-	//TEST PLANE
-	//UINT32 vertexSize = sizeof(float)* 8;
-	//UINT32 offset = 0;
-
-	//gDeviceContext->IASetInputLayout(gVertexLayout);
-	//gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
-	//gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
-
-	//gDeviceContext->VSSetShader(gVertexShader, nullptr, 0);
-	//gDeviceContext->HSSetShader(nullptr, nullptr, 0);
-	//gDeviceContext->DSSetShader(nullptr, nullptr, 0);
-	//gDeviceContext->GSSetShader(nullptr, nullptr, 0);
-	//gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
-
-	//gDeviceContext->PSSetShaderResources(0, 1, &ddsTex1);
-
-	//gDeviceContext->Draw(4, 0);
-	//TEST PLANE
-
+	//////////////////////////////////////////////////////////////
+	// Draw Text
 	spriteBatch->Begin();
 
 	std::wstring yearCount = std::to_wstring(gCounter.theAge.years);

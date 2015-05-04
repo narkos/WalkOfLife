@@ -57,14 +57,14 @@ cbuffer LightProperties : register(b1)
 
 
 
-float4 calcDiffuse(Light light, float3 L, float3 N)
+float4 calcDiffuse(Light light, float3 L, float4 N)
 {
 	float diffCalc;
 	diffCalc = max(0, dot(L, N));	//Returns 0 if surface isn't facing camera.
 	return light.Color * diffCalc;
 }
 
-float4 calcSpecular(Light light, float3 V, float3 L, float3 N)
+float4 calcSpecular(Light light, float3 V, float3 L, float4 N)
 {
 	//Phong
 	float3 R = normalize(reflect(-L, N));
@@ -80,11 +80,11 @@ float4 calcSpecular(Light light, float3 V, float3 L, float3 N)
 
 float calcAtt(Light light, float distance)
 {
-	return (1.0f / (light.AttConst + (light.AttLinear * distance) + (light.AttQuadratic * (distance*distance))));
+	return (1.0f / (light.AttConst + light.AttLinear * distance + light.AttQuadratic * distance*distance));
 }
 
 
-LightingResult createPointLight(Light light, float3 V, float4 P, float3 N)
+LightingResult createPointLight(Light light, float3 V, float4 P, float4 N)
 {
 	LightingResult result;
 
@@ -102,7 +102,7 @@ LightingResult createPointLight(Light light, float3 V, float4 P, float3 N)
 
 }
 
-LightingResult createDirectional(Light light, float3 V, float4 P, float3 N)
+LightingResult createDirectional(Light light, float3 V, float4 P, float4 N)
 {
 	LightingResult result;
 	float3 L = -light.Direction.xyz;
@@ -124,7 +124,7 @@ LightingResult createDirectional(Light light, float3 V, float4 P, float3 N)
 //
 //}
 
-LightingResult ComputeLighting(float4 P, float3 N)
+LightingResult ComputeLighting(float4 P, float4 N)
 {
 	LightingResult finalResult = { { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f } };
 	
