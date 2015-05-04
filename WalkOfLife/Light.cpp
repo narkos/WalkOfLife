@@ -2,21 +2,20 @@
 
 
 
-LightClass::LightClass(XMFLOAT3 pos, bool isActive, bool isStatic) : Entity(pos, isActive, isStatic)
+LightClass::LightClass(int type, XMFLOAT3 pos, bool isActive, bool isStatic) : Entity(pos, isActive, isStatic)
 {
 
-	lightObject.Position = XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f);
-	lightObject.Color(1.0f, 1.0f, 1.0f, 1.0f);
-	lightObject.Type(l_Directional);
-	lightObject.Active(1);
-	lightObject.Direction(0.0f, 0.0f, 1.0f, 0.0f);
-	lightObject.SpotConeAngle(XM_PIDIV2);
-	lightObject.AttConst(1.0f);
-	lightObject.AttLinear(0.0f);
-	lightObject.AttQuadratic(0.0f);
+	this->lightObject.Type = type;
+
+	if (type == l_Directional)
+		lightObject.Direction = XMFLOAT4(pos.x, pos.y, pos.z, 1.0f);
+	else
+		lightObject.Position = XMFLOAT4(pos.x, pos.y, pos.z, 1.0f);
 	
-
-
+	if (isActive)
+		lightObject.Active = 1;
+	else
+		lightObject.Active = 0;
 }
 
 void LightClass::ToggleActive()
@@ -61,9 +60,10 @@ void LightClass::Render(ID3D11Device* dev, ID3D11DeviceContext* devcon)
 
 }
 
+
 LightClass::~LightClass()
 {
-	lightBuffer->Release();
+	//lightBuffer->Release();
 }
 
 //void Light::UpdateBuffer(ID3D11Device* dev)

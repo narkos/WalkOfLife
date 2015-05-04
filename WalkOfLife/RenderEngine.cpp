@@ -86,10 +86,34 @@ bool RenderEngine::Init(){
 	XMFLOAT4 l1Amb = XMFLOAT4(1.0f, 1.0f, 1.0f,1.0f);
 	XMFLOAT4 l1Diff = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	XMFLOAT4 l1Spec = XMFLOAT4(0.5f, 0.2f, 0.2f, 1.0f);
-	XMFLOAT3 l1Dir = XMFLOAT3(0.0f, -50.0f, 30.0f);
+	XMFLOAT3 l1Dir = XMFLOAT3(0.0f, -50.0f, 30.0f);*/
 
-	testLight = new Light(l1Int, l1Pos, true, true);
-	testLight->CreateDirLight(gDevice, l1Amb, l1Diff, l1Spec, l1Dir);*/
+
+
+	testLight[0] = LightClass(l_Directional, XMFLOAT3(0.4f, -0.7f, -1.0f), true, true);
+	testLight[0].lightObject.Color = XMFLOAT4(Colors::Purple);
+	testLight[0].ToggleActive();
+
+	LightClass snoppe(l_Point, XMFLOAT3(1.0f, 1.0f, 0.0f), true, true);
+
+	testLight[1] = snoppe;
+	snoppe.lightObject.Type = 2;
+	testLight[1].lightObject.Position = XMFLOAT4(-4.0f, 0.0f, 0.5f, 0.0f);
+	testLight[1].lightObject.Color = XMFLOAT4(Colors::White);
+	testLight[1].lightObject.AttConst = 1.0f;
+	testLight[1].lightObject.AttLinear = 0.10f;
+	testLight[1].lightObject.AttQuadratic = 0.0000f;
+ 	globalAmb = XMFLOAT4(Colors::Black);
+
+	D3D11_BUFFER_DESC lbuffDesc;
+	ZeroMemory(&lbuffDesc, sizeof(lbuffDesc));
+	lbuffDesc.Usage = D3D11_USAGE_DEFAULT;
+	lbuffDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	lbuffDesc.CPUAccessFlags = 0;
+	lbuffDesc.MiscFlags = 0;
+	lbuffDesc.ByteWidth = sizeof(LightProperties);
+
+	HRESULT hr = gDevice->CreateBuffer(&lbuffDesc, NULL, &lightConstBuff);
 
 	return true; //om båda funkade så returnera true (y)
 }
@@ -480,8 +504,8 @@ void RenderEngine::Render(){
 	gDeviceContext->ClearRenderTargetView(gBackRufferRenderTargetView, clearColor);
 	gDeviceContext->ClearDepthStencilView(gdepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
-	float camxPos = theCharacter->xPos;
-	float camyPos = theCharacter->yPos;
+	camxPos = theCharacter->xPos;
+	camyPos = theCharacter->yPos;
 
 	//WORLD
 	XMMATRIX YRotation = XMMatrixRotationY(rot);
@@ -501,7 +525,8 @@ void RenderEngine::Render(){
 	
 	gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &WorldMatrix1, 0, 0);
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
-
+	
+	gDeviceContext->PSSetConstantBuffers(1, 1, &lightConstBuff);
 
 
 	////////////LIGHTS
@@ -659,6 +684,15 @@ void RenderEngine::Update(float dt){
 	//this->theCharacter->Move(true);
 	thePhysics.Gravitation(theCharacter);
 	theCharacter->CalculateWorld();
+
+	// Update Lights
+	camPos = XMFLOAT4(camxPos, 4.0f, -10.0f, 1.0f);
+	lightProp01.CamPosition = camPos;
+	lightProp01.GlobalAmbient = globalAmb;
+	lightProp01.lights[0] = testLight[0].lightObject;
+	lightProp01.lights[1] = testLight[1].lightObject;
+	gDeviceContext->UpdateSubresource(lightConstBuff, 0, NULL, &lightProp01, 0, 0);
+
 }
 
 // REALESE AND CLEANUP
@@ -675,7 +709,7 @@ void RenderEngine::Release(){
 	gDeviceContext->Release();
 
 	//Kill Lights
-	delete testLight;
+	//delete testLight;
 }
 
 void RenderEngine::ImportObj(char* geometryFileName, char* materialFileName, ID3D11Device* gDev, bool player){// , bool isStatic, XMMATRIX startPosMatrix){

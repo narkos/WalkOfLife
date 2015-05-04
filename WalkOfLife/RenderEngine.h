@@ -63,8 +63,15 @@ public:
 	PlayerObject* theCharacter;
 	std::wstring mainwname;
 
-	Light* testLight;
-	
+
+	//Light Shit
+	LightClass testLight[MAX_LIGHTS];
+	ID3D11Buffer* lightConstBuff;
+	XMFLOAT4 globalAmb;
+	LightProperties lightProp01;
+	XMFLOAT4 camPos;
+	float camxPos;
+	float camyPos;
 
 
 	//Import Functions
@@ -108,6 +115,7 @@ public:
 		XMFLOAT4X4 Projection;
 		XMFLOAT4X4 WorldSpace;
 		XMFLOAT4X4 InvWorld;
+		XMFLOAT4X4 WVP;
 	};
 
 	

@@ -80,12 +80,25 @@ float4 calcSpecular(Light light, float3 V, float3 L, float3 N)
 
 float calcAtt(Light light, float distance)
 {
-	return 1.0f / (light.AttConst + light.AttLinear * distance + light.AttQuadratic * (distance*distance));
+	return (1.0f / (light.AttConst + (light.AttLinear * distance) + (light.AttQuadratic * (distance*distance))));
 }
 
 
 LightingResult createPointLight(Light light, float3 V, float4 P, float3 N)
 {
+	LightingResult result;
+
+	float3 L = (light.Position - P).xyz;
+	float distance = length(L);
+	L = L / distance;
+
+	float attenuation = calcAtt(light, distance);
+
+	result.Diffuse = calcDiffuse(light, L, N)*attenuation;
+	result.Specular = calcSpecular(light, V, L, N) * attenuation;
+
+
+	return result;
 
 }
 
@@ -100,16 +113,16 @@ LightingResult createDirectional(Light light, float3 V, float4 P, float3 N)
 	return result;
 
 }
-
-float calcSpotCone(Light light, float3 L)
-{
-
-}
-
-LightingResult createSpotLight(Light light, float3 V, float4 P, float3 N)
-{
-
-}
+//
+//float calcSpotCone(Light light, float3 L)
+//{
+//
+//}
+//
+//LightingResult createSpotLight(Light light, float3 V, float4 P, float3 N)
+//{
+//
+//}
 
 LightingResult ComputeLighting(float4 P, float3 N)
 {
@@ -121,7 +134,7 @@ LightingResult ComputeLighting(float4 P, float3 N)
 	for (int i = 0; i < MAX_LIGHTS; ++i)
 	{
 		LightingResult result = { { 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f, 0.0f } };
-		if (!lights[i].Active) continue; // Continue if light isn't active
+		if (lights[i].Active != 1) continue; // Continue if light isn't active
 
 		switch (lights[i].Type)
 		{
@@ -137,7 +150,7 @@ LightingResult ComputeLighting(float4 P, float3 N)
 		break;
 		case L_SPOT:
 		{
-			result = createSpotLight(lights[i], V, P, N);
+			//result = createSpotLight(lights[i], V, P, N);
 		}
 		break;
 

@@ -1,5 +1,7 @@
 #include "Entity.h"
 
+#define MAX_LIGHTS 8
+
 enum LightType
 {
 	l_Directional = 1,
@@ -28,7 +30,7 @@ struct Light
 		Position(0.0f, 0.0f, 0.0f, 1.0f),
 		Color(1.0f, 1.0f, 1.0f, 1.0f),
 		Type(l_Directional),
-		Active(1),
+		Active(0),
 		Direction(0.0f, 0.0f, 1.0f, 0.0f),
 		SpotConeAngle(XM_PIDIV2),
 		AttConst(1.0f),
@@ -36,6 +38,14 @@ struct Light
 		AttQuadratic(0.0f)
 	{}
 
+};
+
+struct LightProperties
+{
+	XMFLOAT4 CamPosition;
+	XMFLOAT4 GlobalAmbient;
+
+	Light lights[MAX_LIGHTS];
 };
 
 class LightClass : public Entity{
@@ -47,7 +57,8 @@ protected:
 
 
 public:
-	LightClass(XMFLOAT3 pos, bool isActive, bool isStatic) : Entity(pos, isActive, isStatic){};
+	LightClass(int type, XMFLOAT3 pos, bool isActive, bool isStatic);
+	LightClass(){}
 	~LightClass();
 
 	Light lightObject;
