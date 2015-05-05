@@ -91,8 +91,8 @@ bool RenderEngine::Init(){
 
 
 
-	testLight[0] = LightClass(l_Directional, XMFLOAT3(0.0f, -1.0f, 0.0f), true, true);
-	testLight[0].lightObject.Color = XMFLOAT4(Colors::Purple);
+	testLight[0] = LightClass(l_Directional, XMFLOAT3(1.0f, -1.0f, 0.0f), true, true);
+	testLight[0].lightObject.Color = XMFLOAT4(Colors::White);
 	/*testLight[0].ToggleActive();*/
 
 	LightClass snoppe(l_Point, XMFLOAT3(1.0f, 1.0f, 0.0f), true, true);
@@ -104,7 +104,7 @@ bool RenderEngine::Init(){
 	testLight[1].lightObject.AttConst = 1.0f;
 	testLight[1].lightObject.AttLinear = 0.001f;
 	testLight[1].lightObject.AttQuadratic = 0.00001f;
-	//testLight[1].ToggleActive();
+	testLight[1].ToggleActive();
  	globalAmb = XMFLOAT4(Colors::Black);
 
 	D3D11_BUFFER_DESC lbuffDesc;
