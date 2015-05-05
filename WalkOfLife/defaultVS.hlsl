@@ -8,11 +8,6 @@ cbuffer World : register (c0)
 
 };
 
-cbuffer charWorld : register(c1)
-{
-	matrix world;
-};
-
 
 struct VS_IN
 {
@@ -39,7 +34,7 @@ VS_OUT VS_main(VS_IN input)
 
 	float4 outpos = float4(input.Pos, 1.0f);
 
-		outpos = mul(outpos, world);
+		outpos = mul(outpos, WorldSpace);
 		//outpos = mul(outpos, WorldSpace);
 
 	outpos = mul(outpos, View);

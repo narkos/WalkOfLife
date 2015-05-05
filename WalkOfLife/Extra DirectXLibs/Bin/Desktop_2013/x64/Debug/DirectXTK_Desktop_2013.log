@@ -1,9 +1,9 @@
-﻿Build started 2015-05-04 10:43:43.
-     1>Project "C:\Users\Joel\Documents\GitHub\WalkOfLife\WalkOfLife\Extra DirectXLibs\DirectXTK_Desktop_2013.vcxproj" on node 2 (Build target(s)).
+﻿Build started 2015-05-05 09:50:30.
+     1>Project "C:\Users\Simon\Downloads\Programmering\WalkOfLife\WalkOfLife\Extra DirectXLibs\DirectXTK_Desktop_2013.vcxproj" on node 2 (Build target(s)).
      1>Lib:
-         DirectXTK_Desktop_2013.vcxproj -> C:\Users\Joel\Documents\GitHub\WalkOfLife\WalkOfLife\Extra DirectXLibs\Bin\Desktop_2013\x64\Debug\DirectXTK.lib
-     1>Done Building Project "C:\Users\Joel\Documents\GitHub\WalkOfLife\WalkOfLife\Extra DirectXLibs\DirectXTK_Desktop_2013.vcxproj" (Build target(s)).
+         DirectXTK_Desktop_2013.vcxproj -> C:\Users\Simon\Downloads\Programmering\WalkOfLife\WalkOfLife\Extra DirectXLibs\Bin\Desktop_2013\x64\Debug\DirectXTK.lib
+     1>Done Building Project "C:\Users\Simon\Downloads\Programmering\WalkOfLife\WalkOfLife\Extra DirectXLibs\DirectXTK_Desktop_2013.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.06
+Time Elapsed 00:00:00.08

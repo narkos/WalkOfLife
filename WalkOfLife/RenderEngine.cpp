@@ -520,9 +520,9 @@ void RenderEngine::Render(){
 		gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 		
 		var.CalculateWorld();
-		var.world = XMMatrixTranspose(var.world);
-		gDeviceContext->UpdateSubresource(cWorld, 0, NULL, &var.world, 0, 0);
-		gDeviceContext->VSSetConstantBuffers(1, 1, &cWorld);
+		XMStoreFloat4x4(&WorldMatrix1.WorldSpace, XMMatrixTranspose(var.world));
+		gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &WorldMatrix1, 0, 0);
+		gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
 
 		gDeviceContext->Draw(var.nrElements * 3, 0);
 		}
@@ -545,10 +545,10 @@ void RenderEngine::Render(){
 	{
 		gDeviceContext->IASetVertexBuffers(0, 1, &var.boundingBoxVertexBuffer, &bufferElementSize, &offset1);
 		var.CalculateWorld();
-		var.world = XMMatrixTranspose(var.world);
+		XMStoreFloat4x4(&WorldMatrix1.WorldSpace, XMMatrixTranspose(var.world));
 		//var.world = XMMatrixIdentity();
-		gDeviceContext->UpdateSubresource(cWorld, 0, NULL, &var.world, 0, 0);
-		gDeviceContext->VSSetConstantBuffers(1, 1, &cWorld);
+		gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &WorldMatrix1, 0, 0);
+		gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
 		gDeviceContext->Draw(16, 0);
 	}
 
@@ -564,9 +564,10 @@ void RenderEngine::Render(){
 	gDeviceContext->HSSetShader(nullptr, nullptr, 0);
 	gDeviceContext->DSSetShader(nullptr, nullptr, 0);
 	gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
-	theCharacter->world = XMMatrixTranspose(theCharacter->world);
-	gDeviceContext->UpdateSubresource(cWorld, 0, NULL, &theCharacter->world, 0, 0);
-	gDeviceContext->VSSetConstantBuffers(1, 1, &cWorld);
+	//theCharacter->CalculateWorld();
+	XMStoreFloat4x4(&WorldMatrix1.WorldSpace, XMMatrixTranspose(theCharacter->world));
+	gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &WorldMatrix1, 0, 0);
+	gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
 	gDeviceContext->Draw(theCharacter->nrElements * 3, 0);
 
 	/*UINT32 vertexSize = sizeof(float)* 8;

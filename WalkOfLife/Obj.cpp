@@ -166,7 +166,7 @@ void OBJ::LoadObject(char* geometryFileName, char* materialFileName){
 		extentX = maxX - centerX;
 		extentY = maxY - centerY;
 
-		theBoundingBox = new BoundingOrientedBox(XMFLOAT3(centerX, centerY, 0), XMFLOAT3(extentX, extentY, 10), XMFLOAT4(0.7071, 0, 0, 0.7071));
+		theBoundingBox = new BoundingOrientedBox(XMFLOAT3(centerX, centerY, 0), XMFLOAT3(extentX, extentY, 100), XMFLOAT4(0.7071, 0, 0, 0.7071));
 
 		CreateAABB(vertecies);
 
