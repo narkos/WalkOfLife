@@ -84,6 +84,9 @@
     <ClCompile Include="Physics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameTimer.h">
@@ -144,6 +147,9 @@
     </FxCompile>
     <FxCompile Include="defaultPS.hlsl">
       <Filter>Resource Files\Default Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="LightComputations.fx">
+      <Filter>Resource Files\Light Computation</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

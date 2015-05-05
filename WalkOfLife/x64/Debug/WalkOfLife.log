@@ -1,33 +1,11 @@
-﻿Build started 2015-04-28 12:19:55.
-     1>Project "C:\Users\Joel\Documents\GitHub\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" on node 2 (Build target(s)).
+﻿Build started 2015-04-29 21:19:25.
+     1>Project "D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt Input.cpp Physics.cpp PlayerObject.cpp RenderEngine.cpp WinMain.cpp
-         RenderEngine.cpp
-     1>c:\users\joel\documents\github\walkoflife\walkoflife\PlayerObject.h(65): warning C4305: '=' : truncation from 'double' to 'float'
-         C:\Program Files (x86)\Windows Kits\8.1\Include\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-     1>RenderEngine.cpp(133): warning C4244: '=' : conversion from 'UINT' to 'FLOAT', possible loss of data
-     1>RenderEngine.cpp(134): warning C4244: '=' : conversion from 'UINT' to 'FLOAT', possible loss of data
-     1>RenderEngine.cpp(159): warning C4244: '=' : conversion from 'float' to 'UINT', possible loss of data
-     1>RenderEngine.cpp(465): warning C4305: '+=' : truncation from 'double' to 'float'
-         Generating Code...
-         Skipping... (no relevant changes detected)
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt WinMain.cpp
          WinMain.cpp
-         PlayerObject.cpp
-         Physics.cpp
-         Input.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Joel\Documents\GitHub\WalkOfLife\x64\Debug\WalkOfLife.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Joel\Documents\GitHub\WalkOfLife\x64\Debug\WalkOfLife.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Joel\Documents\GitHub\WalkOfLife\x64\Debug\WalkOfLife.lib" /MACHINE:X64 x64\Debug\GameTimer.obj
-         x64\Debug\Input.obj
-         x64\Debug\Obj.obj
-         x64\Debug\Physics.obj
-         x64\Debug\PlayerObject.obj
-         x64\Debug\RenderEngine.obj
-         x64\Debug\Counters.obj
-         x64\Debug\WinMain.obj
-         "C:\Users\Joel\Documents\GitHub\WalkOfLife\WalkOfLife\Extra DirectXLibs\Bin\Desktop_2013\x64\Debug\DirectXTK.lib"
-         WalkOfLife.vcxproj -> C:\Users\Joel\Documents\GitHub\WalkOfLife\x64\Debug\WalkOfLife.exe
-     1>Done Building Project "C:\Users\Joel\Documents\GitHub\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" (Build target(s)).
+     1>WinMain.cpp : fatal error C1041: cannot open program database 'd:\skapa\-gameprojects\litet spelprojekt bth\engine\walkoflife\walkoflife\x64\debug\vc120.pdb'; if multiple CL.EXE write to the same .PDB file, please use /FS
+     1>Done Building Project "D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:02.48
+Time Elapsed 00:00:00.17

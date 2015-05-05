@@ -32,6 +32,8 @@ public:
 		rot = XMMatrixIdentity(); //den rotationen och skalningen som den importeras in som kommer vara standard värdet
 		scale = XMMatrixIdentity();
 	}
+
+	Entity(){}
 	~Entity(){
 		
 	}
