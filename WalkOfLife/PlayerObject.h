@@ -150,9 +150,9 @@ public:
 
 	void Translate(float x, float y, float z){
 		pos = XMMatrixTranslation(this->xPos + x, this->yPos + y, z);
-		origin = XMVectorSet(xPos, yPos, 0, 0);
+		origin = XMVectorSet(xPos + x, yPos + y, 0, 0);
 		
-	/*	left = XMVectorSet((XMVectorGetX(left) + xPos), (XMVectorGetY(left) + yPos), 0, 0);
+		/*left = XMVectorSet((XMVectorGetX(left) + xPos), (XMVectorGetY(left) + yPos), 0, 0);
 		right = XMVectorSet((XMVectorGetX(right) + xPos), (XMVectorGetY(right) + yPos), 0, 0);
 		up = XMVectorSet((XMVectorGetX(up) + xPos), (XMVectorGetY(up) + yPos), 0, 0);
 		down = XMVectorSet((XMVectorGetX(down) + xPos), (XMVectorGetY(down) + yPos), 0, 0);*/

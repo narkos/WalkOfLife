@@ -14,7 +14,7 @@ void Collision::TestCollision(vector<Platform> platforms){
 		if (player.TestRight(p, 10000) == true){ //den träffa nått till höger
 			canGoRight = false;
 		}
-		if (player.TestLeft(p, 10000) == true){ //borde nog vara mindre än 10, men testa!
+		if (player.TestLeft(p, 1) == true){ //borde nog vara mindre än 10, men testa!
 			canGoLeft = false;
 		}
 		if (player.TestUp(p, 10000) == true){ 

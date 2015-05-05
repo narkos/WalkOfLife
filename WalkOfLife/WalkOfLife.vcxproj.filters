@@ -151,5 +151,11 @@
     <FxCompile Include="defaultPS.hlsl">
       <Filter>Resource Files\Default Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="WireFramePS.hlsl">
+      <Filter>Resource Files\Default Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="WireFrameVS.hlsl">
+      <Filter>Resource Files\Default Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

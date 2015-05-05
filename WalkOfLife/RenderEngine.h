@@ -72,7 +72,7 @@ public:
 		ID3D11Buffer* gVertexBuffer;
 		//ID3D11Buffer* gIndexBuffer;
 		UINT nrElements = 0;
-		BoundingBox bbox;
+		BoundingOrientedBox bbox;
 
 		char* ObjName;
 		std::vector<XMFLOAT3> verteciesPos;
@@ -82,6 +82,8 @@ public:
 		std::vector<int> verteciesIndex;
 	
 	};
+	
+
 	
 	std::vector<Platform> gamePlatforms;
 	std::vector<GameObject> gameObjects;
@@ -139,6 +141,10 @@ protected:
 	ID3D11InputLayout* gVertexLayout = nullptr;
 	ID3D11VertexShader* gVertexShader = nullptr;
 	ID3D11PixelShader* gPixelShader = nullptr;
+	ID3D11VertexShader* gWireFrameVertexShader = nullptr;
+	ID3D11PixelShader* gWireFramePixelShader = nullptr;
+	ID3D11InputLayout* gWireFrameLayout = nullptr;
+
 	ID3D11GeometryShader* gGeometryShader = nullptr;
 
 };

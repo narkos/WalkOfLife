@@ -276,6 +276,19 @@ void RenderEngine::Shaders(){
 	ShaderTest = CompileShader(L"defaultPS.hlsl", "PS_main", "ps_5_0", &pPS);
 	ShaderTest = gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
 
+	D3D11_INPUT_ELEMENT_DESC inputDescPosOnly[] = {
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+
+	gDevice->CreateInputLayout(inputDescPosOnly, ARRAYSIZE(inputDescPosOnly), pVS->GetBufferPointer(), pVS->GetBufferSize(), &gWireFrameLayout);
+
+
+	HRESULT hrWireFrameVS = CompileShader(L"WireFrameVS.hlsl", "main", "vs_5_0", &pVS);
+	gDevice->CreateVertexShader(pVS->GetBufferPointer(), pVS->GetBufferSize(), nullptr, &gWireFrameVertexShader);
+
+	HRESULT hrWireFramePS = CompileShader(L"WireFramePS.hlsl", "main", "ps_5_0", &pPS);
+	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gWireFramePixelShader);
+
 	// Realese shaders
 	pVS->Release();
 	pPS->Release();
@@ -514,6 +527,31 @@ void RenderEngine::Render(){
 		gDeviceContext->Draw(var.nrElements * 3, 0);
 		}
 
+
+	//rita ut boundingboxarna
+	UINT32 bufferElementSize = sizeof(XMFLOAT3);
+	UINT32 offset1 = 0;
+
+	gDeviceContext->IASetInputLayout(gWireFrameLayout);
+	gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+
+	gDeviceContext->VSSetShader(gWireFrameVertexShader, nullptr, 0);
+	gDeviceContext->HSSetShader(nullptr, nullptr, 0);
+	gDeviceContext->DSSetShader(nullptr, nullptr, 0);
+	gDeviceContext->GSSetShader(nullptr, nullptr, 0);
+	gDeviceContext->PSSetShader(gWireFramePixelShader, nullptr, 0);
+
+	for each (CollisionObject var in gamePlatforms)
+	{
+		gDeviceContext->IASetVertexBuffers(0, 1, &var.boundingBoxVertexBuffer, &bufferElementSize, &offset1);
+		var.CalculateWorld();
+		var.world = XMMatrixTranspose(var.world);
+		//var.world = XMMatrixIdentity();
+		gDeviceContext->UpdateSubresource(cWorld, 0, NULL, &var.world, 0, 0);
+		gDeviceContext->VSSetConstantBuffers(1, 1, &cWorld);
+		gDeviceContext->Draw(16, 0);
+	}
+
 	UINT32 vertexSize = sizeof(float)* 8;
 	UINT32 offset = 0;
 
@@ -663,6 +701,7 @@ void RenderEngine::ImportObj(char* geometryFileName, char* materialFileName, ID3
 	if (player)
 	{
 		theCharacter = new PlayerObject(*objectTest.GetVertexBuffer(), XMFLOAT3(0, 6, 0), true, false, BoundingOrientedBox(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), XMFLOAT4(1, 0, 0, 0)));
+		theCharacter->CreateBBOXVertexBuffer(gDevice);
 		theCharacter->nrElements = objectTest.GetNrElements();
 		Collision tempC(*theCharacter);
 		theCollision = tempC;
@@ -672,6 +711,7 @@ void RenderEngine::ImportObj(char* geometryFileName, char* materialFileName, ID3
 	else
 	{
 		Platform testPlatform(false, objectTest.tempVerts, *objectTest.GetVertexBuffer(), XMFLOAT3(0, 0, 0), true, true, *objectTest.theBoundingBox);
+		testPlatform.CreateBBOXVertexBuffer(gDevice);
 		testPlatform.nrElements = objectTest.GetNrElements();
 		gamePlatforms.push_back(testPlatform);
 	}

@@ -1,14 +1,12 @@
-﻿Build started 2015-05-04 12:25:34.
+﻿Build started 2015-05-04 15:38:41.
      1>Project "C:\Users\Joel\Documents\GitHub\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt Collision.cpp Obj.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt Obj.cpp
          Obj.cpp
+     1>Obj.cpp(169): warning C4305: 'argument' : truncation from 'double' to 'float'
      1>Obj.cpp(177): warning C4267: '=' : conversion from 'size_t' to 'UINT', possible loss of data
      1>Obj.cpp(185): warning C4267: '=' : conversion from 'size_t' to 'UINT', possible loss of data
      1>Obj.cpp(234): warning C4056: overflow in floating-point constant arithmetic
-         Collision.cpp
-     1>c:\users\joel\documents\github\walkoflife\walkoflife\PlayerObject.h(70): warning C4305: '=' : truncation from 'double' to 'float'
-         Generating Code...
      1>c:\users\joel\documents\github\walkoflife\walkoflife\obj.cpp(233): warning C4756: overflow in constant arithmetic
      1>c:\users\joel\documents\github\walkoflife\walkoflife\obj.cpp(233): warning C4756: overflow in constant arithmetic
      1>c:\users\joel\documents\github\walkoflife\walkoflife\obj.cpp(233): warning C4756: overflow in constant arithmetic
@@ -33,4 +31,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.35
+Time Elapsed 00:00:02.26
