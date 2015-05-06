@@ -26,8 +26,8 @@ LRESULT CALLBACK MainWindowProc(HWND hwindow, UINT msg, WPARAM wParam, LPARAM lP
 RenderEngine::RenderEngine(HINSTANCE hInstance, std::string name, UINT scrW, UINT scrH){
 	this->hInstance = hInstance;
 	applicationName = name;
-	screen_Width = scrW;
-	screen_Height = scrH;
+	screen_Width = mainCamera.getWindowWidth();
+	screen_Height = mainCamera.getWindowHeight();
 	pRenderEngine = this;
 	windowStyle = WS_OVERLAPPED | WS_CAPTION | WS_MINIMIZEBOX;
 }
@@ -507,16 +507,22 @@ void RenderEngine::Render(){
 	gDeviceContext->ClearRenderTargetView(gBackRufferRenderTargetView, clearColor);
 	gDeviceContext->ClearDepthStencilView(gdepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
-	camxPos = theCharacter->xPos;
-	camyPos = theCharacter->yPos;
+	mainCamera.setPlayerXPos(theCharacter->xPos);
+	mainCamera.setPlayerYPos(theCharacter->yPos);
 
+	mainCamera.updateCamera();
 	//WORLD
 	XMMATRIX YRotation = XMMatrixRotationY(rot);
-	// Sets camera pos and angle
-	XMMATRIX CamView = XMMatrixLookAtLH(XMVectorSet(camxPos, 4.0f, -10.0f, 1.0f), XMVectorSet(camxPos, camyPos, 0.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0, 0.0f));
-	XMMATRIX CamProjection = XMMatrixPerspectiveFovLH(3.14f*(0.45f), 640.0f / 480.0f, 0.5f, 50.0f);
+
+	//The Camera Matrices are now defined in the camera class (mainCamera)
+	
+	XMMATRIX CamView = mainCamera.getCamView();
+	XMMATRIX CamProjection = mainCamera.getCamProjection();
 	XMMATRIX identityM = XMMatrixIdentity();
-	XMMATRIX WorldInv = XMMatrixInverse(nullptr, XMMatrixIdentity());
+	XMMATRIX WorldInv = XMMatrixInverse(nullptr, YRotation);
+	identityM = XMMatrixTranslation(rot, 1, 1);
+	World WorldMatrix1;
+
 
 	//identityM = XMMatrixTranslation(rot, 1, 1);
 	World perObjCBData;
@@ -526,8 +532,8 @@ void RenderEngine::Render(){
 
 
 	XMStoreFloat4x4(&perObjCBData.WVP, XMMatrixTranspose(WVP));
-	XMStoreFloat4x4(&perObjCBData.View, XMMatrixTranspose(CamView));
-	XMStoreFloat4x4(&perObjCBData.Projection, XMMatrixTranspose(CamProjection));
+	XMStoreFloat4x4(&WorldMatrix1.View, XMMatrixTranspose(CamView));
+	XMStoreFloat4x4(&WorldMatrix1.Projection, XMMatrixTranspose(CamProjection));
 	XMStoreFloat4x4(&perObjCBData.WorldSpace, XMMatrixTranspose(XMMatrixIdentity()));
 	XMStoreFloat4x4(&perObjCBData.InvWorld, XMMatrixTranspose(WorldInv));
 

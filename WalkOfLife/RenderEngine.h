@@ -16,6 +16,7 @@
 
 
 //#include "GameObject.h"
+#include "Camera.h"
 #include "Physics.h"
 #include "Input.h"
 #include "Platform.h"
@@ -61,6 +62,7 @@ public:
 	GameTimer gTimer;
 	Counters gCounter;
 	PlayerObject* theCharacter;
+	Camera mainCamera;
 	std::wstring mainwname;
 
 
