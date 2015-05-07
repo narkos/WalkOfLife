@@ -23,13 +23,18 @@ float4 PS_main(VS_OUT input) : SV_Target
 {
 	LightingResult lightCalcs = ComputeLighting(input.wPos, normalize(input.Nor));
 
-	input.Nor = normalize(input.Nor);
+	//input.Nor = normalize(input.Nor);
 	//float3 objtoEye = normalize()
-	float4 Texdiffuse = txDiffuse.Sample(sampAni, input.Tex);
+	float4 Texdiffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+		if (Material.UseTexture == 1)
+		{ 
+			Texdiffuse = txDiffuse.Sample(sampAni, input.Tex);
+		}
 
-		float4 ambient = GlobalAmbient;
-		float4 diffuse = lightCalcs.Diffuse;
-		float4 specular = lightCalcs.Specular;
+		float4 emissive = Material.Emissive;
+		float4 ambient = GlobalAmbient*Material.Ambient;
+		float4 diffuse = lightCalcs.Diffuse* Material.Diffuse;
+		float4 specular = lightCalcs.Specular*Material.Specular;
 
 		float4 finalColor = (ambient + diffuse + specular) * Texdiffuse;
 

@@ -65,7 +65,7 @@ void OBJ::LoadObject(char* geometryFileName, char* materialFileName){
 
 				indecies.push_back(fx.x - 1); //alla indecies i en array som kommer att användas i main
 				indecies.push_back(fy.x - 1); //de kommer ligga en triangle i streck i arrayen [0], [1] och [2] kommer vara indecies för en triangle alltså
-				indecies.push_back(fz.x - 1);
+				indecies.push_back(fx.x - 1);
 			}
 
 

@@ -1,5 +1,9 @@
-﻿Build started 2015-05-05 13:49:50.
+﻿Build started 2015-05-06 20:23:47.
+     1>Project "D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         WalkOfLife.vcxproj -> D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\x64\Debug\WalkOfLife.exe
+     1>Done Building Project "D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.04
+Time Elapsed 00:00:00.10
