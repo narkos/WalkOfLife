@@ -32,6 +32,7 @@ RenderEngine::RenderEngine(HINSTANCE hInstance, std::string name, UINT scrW, UIN
 	//screen_Height = scrH; //OLD
 	pRenderEngine = this;
 	windowStyle = WS_OVERLAPPED | WS_CAPTION | WS_MINIMIZEBOX;
+	this->theQuadtree = new Quadtree(0, 0, 100, 100, 1, 6);
 }
 
 // DESTRUCTOR
@@ -773,6 +774,7 @@ void RenderEngine::ImportObj(char* geometryFileName, char* materialFileName, ID3
 		Platform testPlatform(false, objectTest.tempVerts, *objectTest.GetVertexBuffer(), XMFLOAT3(0, 0, 0), true, true, *objectTest.theBoundingBox);
 		testPlatform.CreateBBOXVertexBuffer(gDevice);
 		testPlatform.nrElements = objectTest.GetNrElements();
+		theQuadtree->AddObject(&testPlatform);
 		gamePlatforms.push_back(testPlatform);
 	}
 

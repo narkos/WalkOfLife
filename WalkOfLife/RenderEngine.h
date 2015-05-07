@@ -16,6 +16,7 @@
 
 
 //#include "GameObject.h"
+#include "Quadtree.h"
 #include "Camera.h"
 #include "Physics.h"
 #include "Input.h"
@@ -57,6 +58,7 @@ public:
 	void Fonts();
 	void fpscounter();
 	
+	Quadtree *theQuadtree;
 	Collision theCollision;
 	OBJ theOBJ;
 	Physics thePhysics;
