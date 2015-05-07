@@ -325,6 +325,20 @@ void RenderEngine::Shaders(){
 	ShaderTest = CompileShader(L"defaultPS.hlsl", "PS_main", "ps_5_0", &pPS);
 	ShaderTest = gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gPixelShader);
 
+	//wireframe
+	D3D11_INPUT_ELEMENT_DESC inputDescPosOnly[] = {
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+
+	gDevice->CreateInputLayout(inputDescPosOnly, ARRAYSIZE(inputDescPosOnly), pVS->GetBufferPointer(), pVS->GetBufferSize(), &gWireFrameLayout);
+
+
+	HRESULT hrWireFrameVS = CompileShader(L"WireFrameVS.hlsl", "main", "vs_5_0", &pVS);
+	gDevice->CreateVertexShader(pVS->GetBufferPointer(), pVS->GetBufferSize(), nullptr, &gWireFrameVertexShader);
+
+	HRESULT hrWireFramePS = CompileShader(L"WireFramePS.hlsl", "main", "ps_5_0", &pPS);
+	gDevice->CreatePixelShader(pPS->GetBufferPointer(), pPS->GetBufferSize(), nullptr, &gWireFramePixelShader);
+
 	// Realese shaders
 	pVS->Release();
 	pPS->Release();
@@ -621,6 +635,34 @@ void RenderEngine::Render(){
 
 
 
+		//rita ut boundingboxarna
+		UINT32 bufferElementSize = sizeof(XMFLOAT3);
+		UINT32 offset1 = 0;
+
+		gDeviceContext->IASetInputLayout(gWireFrameLayout);
+		gDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+
+		gDeviceContext->VSSetShader(gWireFrameVertexShader, nullptr, 0);
+		gDeviceContext->HSSetShader(nullptr, nullptr, 0);
+		gDeviceContext->DSSetShader(nullptr, nullptr, 0);
+		gDeviceContext->GSSetShader(nullptr, nullptr, 0);
+		gDeviceContext->PSSetShader(gWireFramePixelShader, nullptr, 0);
+
+		for each (CollisionObject var in gamePlatforms)
+		{
+			gDeviceContext->IASetVertexBuffers(0, 1, &var.boundingBoxVertexBuffer, &bufferElementSize, &offset1);
+			var.CalculateWorld();
+			XMStoreFloat4x4(&perObjCBData.InvWorld, XMMatrixTranspose(XMMatrixInverse(nullptr, var.world)));
+			XMStoreFloat4x4(&perObjCBData.WorldSpace, XMMatrixIdentity());
+			//var.world = XMMatrixIdentity();
+			gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &perObjCBData, 0, 0);
+			gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
+			gDeviceContext->Draw(16, 0);
+
+		}
+
+
+
 	gDeviceContext->PSSetShaderResources(0, 1, &ddsTex1);
 
 	gDeviceContext->IASetInputLayout(gVertexLayout);
@@ -701,7 +743,7 @@ void RenderEngine::Update(float dt){
 			this->theCharacter->Move(false); //left
 		}
 
-		else if (input == 2)
+		else if (input == 2 && theCollision.rightValid() == true)
 		{
 			this->theCharacter->Move(true); //right
 

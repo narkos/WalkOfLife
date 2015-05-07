@@ -12,8 +12,17 @@ class PlayerObject : public CollisionObject{
 protected:
 	float speed;
 	float jumpHeight;
-	XMVECTOR origin;
+
+	float rayLength; //storar hur lång ray hiten blev
+	float rayRangeUp = 0.2f;
+	float rayRangeDown =1;
+	float rayRangeSides = 0.2f;
+	XMVECTOR originLow, originHigh, originMiddle;
+	float lowValue = 0, middleValue = 0.2f, highValue = 1;
 	XMVECTOR up, down, right, left;
+
+	ID3D11Buffer* UpperHoriTestvertexBuffer = nullptr;
+	ID3D11Buffer* lowerHoriTestvertexBuffer = nullptr;
 
 	struct Vec
 	{
@@ -72,11 +81,14 @@ public:
 	PlayerObject(ID3D11Buffer *b, XMFLOAT3 pos, bool isActive, bool isStatic, BoundingBox bbox) : CollisionObject(b, pos, isActive, isStatic, bbox){
 		this->speed = 0.05;
 
-		origin = XMVectorSet(pos.x, pos.y, pos.z, 1); //0 för att det är en vektor
+		originLow = XMVectorSet(pos.x, pos.y + lowValue, pos.z, 1); //0 för att det är en vektor
+		originMiddle = XMVectorSet(pos.x, pos.y + middleValue, pos.z, 1);
+		originHigh = XMVectorSet(pos.x, pos.y + highValue, pos.z, 1);
 		up = XMVectorSet(0, 1, 0, 0);
 		down = XMVectorSet(0, -1, 0, 0);
 		right = XMVectorSet(1, 0, 0, 0);
 		left = XMVectorSet(-1, 0, 0, 0);
+
 	}
 
 	PlayerObject(){}
@@ -111,43 +123,63 @@ public:
 		else return false;
 	}
 
-	bool TestUp(Platform pObj, float &rayLength){
+	bool TestUp(Platform pObj){
 		if (pObj.GetActive() == true){
-			if (pObj.GetBBOX().Intersects(origin, up, rayLength) == true){
-				return true;
+			if (pObj.GetBBOX().Intersects(originHigh, up, rayLength) == true){
+				if (rayLength < rayRangeUp)
+					return true;
+				else return false;
 			}
 			else return false;
 		}
 		else return false;
 	}
 
-	bool TestDown(Platform pObj, float &rayLength){
+	bool TestDown(Platform pObj){
 		if (pObj.GetActive() == true){
 
-			if (pObj.GetBBOX().Intersects(origin, down, rayLength) == true){
-				bajs++;
-				return true;
-
+			if (pObj.GetBBOX().Intersects(originLow, down, rayLength) == true){
+				if (rayLength < rayRangeDown)
+					return true;
+				else return false;
 			}
 			else return false;
 		}
 		else return false;
 	}
 
-	bool TestRight(Platform pObj, float &rayLength){
+	bool TestRight(Platform pObj){
 		if (pObj.GetActive() == true){
-			if (pObj.GetBBOX().Intersects(origin, right, rayLength) == true){
-				return true;
+			if (pObj.GetBBOX().Intersects(originMiddle, right, rayLength) == true){
+				if (rayLength < rayRangeSides){
+					if (pObj.GetBBOX().Intersects(originHigh, right, rayLength) == true){
+						if (rayLength < rayRangeSides){
+							return true;
+						}
+						else return false;
+					}
+					else return false;
+				}
+				else return false;
 			}
 			else return false;
 		}
 		else return false;
 	}
 
-	bool TestLeft(Platform pObj, float &rayLength){
+	bool TestLeft(Platform pObj){
 		if (pObj.GetActive() == true){
-			if (pObj.GetBBOX().Intersects(origin, left, rayLength) == true){
-				return true;
+			if (pObj.GetBBOX().Intersects(originMiddle, left, rayLength) == true){
+				if (rayLength < rayRangeSides){
+					if (pObj.GetBBOX().Intersects(originHigh, left, rayLength) == true){
+						if (rayLength < rayRangeSides){
+							return true;
+						}
+						else return false;
+					}
+					else return false;
+				}
+				else return false;
 			}
 			else return false;
 		}
@@ -156,7 +188,10 @@ public:
 
 	void Translate(float x, float y, float z){
 		pos = XMMatrixTranslation(this->xPos + x, this->yPos + y, 0);
-		origin = XMVectorSet(xPos + x, yPos + y, 0, 0);
+
+		originLow = XMVectorSet(xPos + x, yPos + y + lowValue, 0, 1);
+		originMiddle = XMVectorSet(xPos + x, yPos + y + middleValue, 0, 1);
+		originHigh = XMVectorSet(xPos + x, yPos + y + highValue, 0, 1);
 
 		/*left = XMVectorSet((XMVectorGetX(left) + xPos), (XMVectorGetY(left) + yPos), 0, 0);
 		right = XMVectorSet((XMVectorGetX(right) + xPos), (XMVectorGetY(right) + yPos), 0, 0);
@@ -164,42 +199,42 @@ public:
 		down = XMVectorSet((XMVectorGetX(down) + xPos), (XMVectorGetY(down) + yPos), 0, 0);*/
 	}
 
-	float GetYValueOnMesh(Platform pObj, XMVECTOR ray, float rayLength){ //kör först funktionen TestDown tex. Hämtar det Y-värde som spelaren ska stå på
-		if (TestDown(pObj, rayLength)){
-			vector<Triangle> tris = pObj.GetTriangles();
-			for each (Triangle t in tris)
-			{
-				if (DirectX::TriangleTests::Intersects(origin, ray, t.x, t.y, t.z, rayLength) == true){ //står spelaren på denna triangeln?
-					//ta reda på vart på triangeln spelaren står, genom att använda worldpos mojs
-					//hur hittar vi positionen mellan två punkter i worldspace?
-					Vec e1, e2, s;
-					Vec or(XMVectorGetX(origin), XMVectorGetY(origin), XMVectorGetZ(origin));
-					Vec rayDirection(0, -1, 0);
+	//float GetYValueOnMesh(Platform pObj, XMVECTOR ray, float rayLength){ //kör först funktionen TestDown tex. Hämtar det Y-värde som spelaren ska stå på
+	//	if (TestDown(pObj, rayLength)){
+	//		vector<Triangle> tris = pObj.GetTriangles();
+	//		for each (Triangle t in tris)
+	//		{
+	//			if (DirectX::TriangleTests::Intersects(origin, ray, t.x, t.y, t.z, rayLength) == true){ //står spelaren på denna triangeln?
+	//				//ta reda på vart på triangeln spelaren står, genom att använda worldpos mojs
+	//				//hur hittar vi positionen mellan två punkter i worldspace?
+	//				Vec e1, e2, s;
+	//				Vec or(XMVectorGetX(origin), XMVectorGetY(origin), XMVectorGetZ(origin));
+	//				Vec rayDirection(0, -1, 0);
 
-					Vec tx(XMVectorGetX(t.x), XMVectorGetY(t.x), XMVectorGetZ(t.x));
-					Vec ty(XMVectorGetX(t.y), XMVectorGetY(t.y), XMVectorGetZ(t.y));
-					Vec tz(XMVectorGetX(t.z), XMVectorGetY(t.z), XMVectorGetZ(t.z));
-					e1 = ty.Sub(tx);
-					e2 = tz.Sub(tx);
-					s = or.Sub(tx);
-					//Vec tempVec = (r.d, e1, e2);
-					Vec vecTemp = Vec(Det(s, e1, e2), Det(rayDirection.VectorMultFloat(-1.0), s, e2), Det(rayDirection.VectorMultFloat(-1.0), e1, s));
+	//				Vec tx(XMVectorGetX(t.x), XMVectorGetY(t.x), XMVectorGetZ(t.x));
+	//				Vec ty(XMVectorGetX(t.y), XMVectorGetY(t.y), XMVectorGetZ(t.y));
+	//				Vec tz(XMVectorGetX(t.z), XMVectorGetY(t.z), XMVectorGetZ(t.z));
+	//				e1 = ty.Sub(tx);
+	//				e2 = tz.Sub(tx);
+	//				s = or.Sub(tx);
+	//				//Vec tempVec = (r.d, e1, e2);
+	//				Vec vecTemp = Vec(Det(s, e1, e2), Det(rayDirection.VectorMultFloat(-1.0), s, e2), Det(rayDirection.VectorMultFloat(-1.0), e1, s));
 
-					Vec inversen = vecTemp.VectorMultFloat((1 / Det((rayDirection.VectorMultFloat(-1.0)), e1, e2)));
-					float t1 = inversen.x;
-					return t1;
-					break;
-				}
-			}
-			return 0;
-		}
-		else return 0; //ändra denna eventuellt
+	//				Vec inversen = vecTemp.VectorMultFloat((1 / Det((rayDirection.VectorMultFloat(-1.0)), e1, e2)));
+	//				float t1 = inversen.x;
+	//				return t1;
+	//				break;
+	//			}
+	//		}
+	//		return 0;
+	//	}
+	//	else return 0; //ändra denna eventuellt
 
-		//}//RayTestTriangleInMesh
+	//	//}//RayTestTriangleInMesh
 
 
 
-	}
+	//}
 
 	////dessa två är bara här för att virtuell mojset ska stämma överens
 	bool isCollectable(){ return false; }

@@ -161,5 +161,8 @@ protected:
 	ID3D11PixelShader* gPixelShader = nullptr;
 	ID3D11GeometryShader* gGeometryShader = nullptr;
 
+	ID3D11VertexShader* gWireFrameVertexShader = nullptr;
+	ID3D11PixelShader* gWireFramePixelShader = nullptr;
+	ID3D11InputLayout* gWireFrameLayout = nullptr;
 
 };
