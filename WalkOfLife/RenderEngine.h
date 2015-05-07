@@ -144,6 +144,8 @@ protected:
 	ID3D11DepthStencilView* gDepthStencilView = nullptr;
 	ID3D11DepthStencilState* gDepthStencilState = nullptr;
 	ID3D11Texture2D* depthStencilBuffer = nullptr;
+	ID3D11RasterizerState* gRasterStateDefault;
+
 
 	ID3D11Buffer* gVertexBuffer = nullptr;
 	ID3D11Buffer* gVertexBuffer2 = nullptr;

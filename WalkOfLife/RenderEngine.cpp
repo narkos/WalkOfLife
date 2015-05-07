@@ -437,16 +437,17 @@ bool RenderEngine::InitDirect3D(HWND hWindow){
 		depthStencilDesc.CPUAccessFlags = 0;
 		depthStencilDesc.MiscFlags = 0;
 
-		HRESULT hr1 = gDevice->CreateTexture2D(&depthStencilDesc, NULL, &depthStencilBuffer);
-		
+		HRESULT hr1 = gDevice->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencilBuffer);
+		HRESULT hr2 = gDevice->CreateDepthStencilView(depthStencilBuffer, nullptr, &gDepthStencilView);
 
 		D3D11_DEPTH_STENCIL_DESC dsDesc;
+		ZeroMemory(&dsDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
 		//Depth test settings
-		dsDesc.DepthEnable = true;
+		dsDesc.DepthEnable = TRUE;
 		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 		dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
 		//Stencil tests
-		dsDesc.StencilEnable = true;
+		dsDesc.StencilEnable = TRUE;
 		dsDesc.StencilReadMask = 0xFF;
 		dsDesc.StencilWriteMask = 0xFF;
 		//Stencil operations - Pixel Front Facing
@@ -463,16 +464,24 @@ bool RenderEngine::InitDirect3D(HWND hWindow){
 		HRESULT hr3 = gDevice->CreateDepthStencilState(&dsDesc, &gDepthStencilState);
 		gDeviceContext->OMSetDepthStencilState(gDepthStencilState, 1);
 
-		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
-		descDSV.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
-		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-		descDSV.Texture2D.MipSlice = 0;
-
-		HRESULT hr2 = gDevice->CreateDepthStencilView(depthStencilBuffer, &descDSV, &gDepthStencilView);
-
 		// set the render target as the back buffer
 		gDeviceContext->OMSetRenderTargets(1, &gBackRufferRenderTargetView, gDepthStencilView);
 
+
+		D3D11_RASTERIZER_DESC rasterizerDesc;
+		ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+		rasterizerDesc.AntialiasedLineEnable = FALSE;
+		rasterizerDesc.CullMode = D3D11_CULL_BACK;
+		rasterizerDesc.DepthBias = 0;
+		rasterizerDesc.DepthBiasClamp = 0.0f;
+		rasterizerDesc.DepthClipEnable = TRUE;
+		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+		rasterizerDesc.FrontCounterClockwise = FALSE;
+		rasterizerDesc.MultisampleEnable = FALSE;
+		rasterizerDesc.ScissorEnable = FALSE;
+		rasterizerDesc.SlopeScaledDepthBias = 0.0f;
+
+		hr3 = gDevice->CreateRasterizerState(&rasterizerDesc, &gRasterStateDefault);
 		return true; //returnerar att den HAR klarat av att skapa device och swapchain
 	}
 
@@ -544,7 +553,7 @@ void RenderEngine::Render(){
 	gDeviceContext->OMSetBlendState(0, 0, 0xffffffff);
 	gDeviceContext->ClearRenderTargetView(gBackRufferRenderTargetView, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-	
+	gDeviceContext->RSSetState(gRasterStateDefault);
 	camxPos = theCharacter->xPos;
 	camyPos = theCharacter->yPos;
 
