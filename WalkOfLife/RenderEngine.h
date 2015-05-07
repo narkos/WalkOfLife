@@ -16,6 +16,7 @@
 
 
 //#include "GameObject.h"
+#include "Camera.h"
 #include "Physics.h"
 #include "Input.h"
 #include "Platform.h"
@@ -56,11 +57,13 @@ public:
 	void Fonts();
 	void fpscounter();
 	
+	Collision theCollision;
 	OBJ theOBJ;
 	Physics thePhysics;
 	GameTimer gTimer;
 	Counters gCounter;
 	PlayerObject* theCharacter;
+	Camera mainCamera;
 	std::wstring mainwname;
 
 
@@ -144,8 +147,6 @@ protected:
 	ID3D11DepthStencilView* gDepthStencilView = nullptr;
 	ID3D11DepthStencilState* gDepthStencilState = nullptr;
 	ID3D11Texture2D* depthStencilBuffer = nullptr;
-	ID3D11RasterizerState* gRasterStateDefault;
-
 
 	ID3D11Buffer* gVertexBuffer = nullptr;
 	ID3D11Buffer* gVertexBuffer2 = nullptr;

@@ -1,4 +1,7 @@
 #pragma once
+#ifndef ENTITY_H
+#define ENTITY_H
+#endif
 
 #include <DirectXMath.h>
 #include <DirectXMathMatrix.inl>
@@ -9,15 +12,15 @@
 
 using namespace DirectX;
 using namespace std;
-using namespace DirectX::TriangleTests;
+//using namespace DirectX::TriangleTests;
 
 class Entity{
 protected:
 	bool isActive; //ska vi rendera detta eller inte? jag lägger denna här ifall vi tex vill kunna stänga av ljus oxå
 	bool isStatic;
-	
 
-	
+
+
 	XMMATRIX rot;
 	XMMATRIX scale;
 
@@ -28,6 +31,9 @@ public:
 	Entity(XMFLOAT3 pos, bool isActive, bool isStatic){
 		this->isActive = isActive;
 		this->isStatic = isStatic;
+		this->xPos = pos.x;
+		this->yPos = pos.y;
+
 		Translate(pos.x, pos.y, pos.z);
 		rot = XMMatrixIdentity(); //den rotationen och skalningen som den importeras in som kommer vara standard värdet
 		scale = XMMatrixIdentity();
@@ -35,7 +41,7 @@ public:
 
 	Entity(){}
 	~Entity(){
-		
+
 	}
 
 	XMMATRIX world;
@@ -53,7 +59,7 @@ public:
 
 	void CalculateWorld(){ //denna ska kallas innan man skickar in den i GPUn
 		world = scale * rot * pos; //stämmer detta?
-		}
+	}
 
 	void SetActive(bool a){
 		isActive = a; //används ifall vi vill stänga av detta object, tex när man plockar upp den

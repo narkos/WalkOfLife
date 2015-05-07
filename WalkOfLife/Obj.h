@@ -46,7 +46,7 @@ public:
 	float extentY;
 	float extentZ;
 
-	BoundingOrientedBox* theBoundingBox;
+	BoundingBox* theBoundingBox;
 	std::vector<XMFLOAT3> tempVerts;
 	char* geometryFileNameTemp;
 

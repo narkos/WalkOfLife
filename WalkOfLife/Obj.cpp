@@ -65,7 +65,7 @@ void OBJ::LoadObject(char* geometryFileName, char* materialFileName){
 
 				indecies.push_back(fx.x - 1); //alla indecies i en array som kommer att användas i main
 				indecies.push_back(fy.x - 1); //de kommer ligga en triangle i streck i arrayen [0], [1] och [2] kommer vara indecies för en triangle alltså
-				indecies.push_back(fx.x - 1);
+				indecies.push_back(fz.x - 1);
 			}
 
 
@@ -133,15 +133,15 @@ void OBJ::LoadObject(char* geometryFileName, char* materialFileName){
 			vertecies.push_back(tempVertex);
 			tempVerts.push_back(XMFLOAT3(tempVertex.vx, tempVertex.vy, tempVertex.vz));
 		}
-	float minX = 99999;
-	float maxX = 0;
-	float minY = 99999;
-	float maxY = 0;
-	float minZ = 99999;
-	float maxZ = 0;
+		float minX = 99999;
+		float maxX = 0;
+		float minY = 99999;
+		float maxY = 0;
+		float minZ = 99999;
+		float maxZ = 0;
 		for (int i = 0; i < SavedVertsX.size(); i++)
 		{
-			
+
 
 			if (SavedVertsX[i] < minX)
 			{
@@ -166,7 +166,7 @@ void OBJ::LoadObject(char* geometryFileName, char* materialFileName){
 		extentX = maxX - centerX;
 		extentY = maxY - centerY;
 
-		theBoundingBox = new BoundingOrientedBox(XMFLOAT3(centerX, centerY, 0), XMFLOAT3(extentX, extentY, 1), XMFLOAT4(1, 1, 1, 1));
+		theBoundingBox = new BoundingBox(XMFLOAT3(centerX, centerY, 0), XMFLOAT3(extentX, extentY, 10));
 
 		CreateAABB(vertecies);
 

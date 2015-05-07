@@ -13,7 +13,7 @@ Physics::~Physics()
 {
 }
 
-void Physics::Gravitation(PlayerObject *theCharacter)
+void Physics::Gravitation(Collision theCollision, PlayerObject *theCharacter)
 {
 	if (theCharacter->jumping == true)
 	{
@@ -24,14 +24,15 @@ void Physics::Gravitation(PlayerObject *theCharacter)
 	{
 		theCharacter->jumping = false;
 	}
-	if (theCharacter->yPos <= -4)
+
+	if(theCollision.isGrounded())
 	{
 		this->onPlatform = true;
 		this->downforce = 0.1;
 	}
-	if (theCharacter->yPos >-4 || this->upforce > 0)
+	if (!theCollision.isGrounded() || this->upforce > 0)
 	{
-		if (theCharacter->yPos > -4)
+		if (!theCollision.isGrounded())
 		{
 			this->downforce = this->downforce * 1.02;
 		}
@@ -45,7 +46,7 @@ void Physics::Gravitation(PlayerObject *theCharacter)
 	}
 }
 
-void Physics::Jump(PlayerObject *theCharacter)
+void Physics::Jump(Collision theCollision, PlayerObject *theCharacter)
 {
 	this->upforce = 0.1;
 	theCharacter->jumping = true;

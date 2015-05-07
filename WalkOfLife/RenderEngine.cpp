@@ -26,8 +26,10 @@ LRESULT CALLBACK MainWindowProc(HWND hwindow, UINT msg, WPARAM wParam, LPARAM lP
 RenderEngine::RenderEngine(HINSTANCE hInstance, std::string name, UINT scrW, UINT scrH){
 	this->hInstance = hInstance;
 	applicationName = name;
-	screen_Width = scrW;
-	screen_Height = scrH;
+	screen_Width = mainCamera.getWindowWidth();
+	screen_Height = mainCamera.getWindowHeight();
+	//screen_Width = scrW; //OLD
+	//screen_Height = scrH; //OLD
 	pRenderEngine = this;
 	windowStyle = WS_OVERLAPPED | WS_CAPTION | WS_MINIMIZEBOX;
 }
@@ -437,17 +439,16 @@ bool RenderEngine::InitDirect3D(HWND hWindow){
 		depthStencilDesc.CPUAccessFlags = 0;
 		depthStencilDesc.MiscFlags = 0;
 
-		HRESULT hr1 = gDevice->CreateTexture2D(&depthStencilDesc, nullptr, &depthStencilBuffer);
-		HRESULT hr2 = gDevice->CreateDepthStencilView(depthStencilBuffer, nullptr, &gDepthStencilView);
+		HRESULT hr1 = gDevice->CreateTexture2D(&depthStencilDesc, NULL, &depthStencilBuffer);
+		
 
 		D3D11_DEPTH_STENCIL_DESC dsDesc;
-		ZeroMemory(&dsDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
 		//Depth test settings
-		dsDesc.DepthEnable = TRUE;
+		dsDesc.DepthEnable = true;
 		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 		dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
 		//Stencil tests
-		dsDesc.StencilEnable = TRUE;
+		dsDesc.StencilEnable = true;
 		dsDesc.StencilReadMask = 0xFF;
 		dsDesc.StencilWriteMask = 0xFF;
 		//Stencil operations - Pixel Front Facing
@@ -464,24 +465,16 @@ bool RenderEngine::InitDirect3D(HWND hWindow){
 		HRESULT hr3 = gDevice->CreateDepthStencilState(&dsDesc, &gDepthStencilState);
 		gDeviceContext->OMSetDepthStencilState(gDepthStencilState, 1);
 
+		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+		descDSV.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		descDSV.Texture2D.MipSlice = 0;
+
+		HRESULT hr2 = gDevice->CreateDepthStencilView(depthStencilBuffer, &descDSV, &gDepthStencilView);
+
 		// set the render target as the back buffer
 		gDeviceContext->OMSetRenderTargets(1, &gBackRufferRenderTargetView, gDepthStencilView);
 
-
-		D3D11_RASTERIZER_DESC rasterizerDesc;
-		ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
-		rasterizerDesc.AntialiasedLineEnable = FALSE;
-		rasterizerDesc.CullMode = D3D11_CULL_BACK;
-		rasterizerDesc.DepthBias = 0;
-		rasterizerDesc.DepthBiasClamp = 0.0f;
-		rasterizerDesc.DepthClipEnable = TRUE;
-		rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-		rasterizerDesc.FrontCounterClockwise = FALSE;
-		rasterizerDesc.MultisampleEnable = FALSE;
-		rasterizerDesc.ScissorEnable = FALSE;
-		rasterizerDesc.SlopeScaledDepthBias = 0.0f;
-
-		hr3 = gDevice->CreateRasterizerState(&rasterizerDesc, &gRasterStateDefault);
 		return true; //returnerar att den HAR klarat av att skapa device och swapchain
 	}
 
@@ -553,15 +546,18 @@ void RenderEngine::Render(){
 	gDeviceContext->OMSetBlendState(0, 0, 0xffffffff);
 	gDeviceContext->ClearRenderTargetView(gBackRufferRenderTargetView, clearColor);
 	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-	gDeviceContext->RSSetState(gRasterStateDefault);
-	camxPos = theCharacter->xPos;
-	camyPos = theCharacter->yPos;
+	
+	mainCamera.setPlayerXPos(theCharacter->xPos);
+	mainCamera.setPlayerYPos(theCharacter->yPos);
 
+	mainCamera.updateCamera();
 	//WORLD
 	XMMATRIX YRotation = XMMatrixRotationY(rot);
-	// Sets camera pos and angle
-	XMMATRIX CamView = XMMatrixLookAtLH(XMVectorSet(camxPos, 4.0f, -5.0f, 1.0f), XMVectorSet(camxPos, camyPos, 0.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0, 0.0f));
-	XMMATRIX CamProjection = XMMatrixPerspectiveFovLH(3.14f*(0.45f), 640.0f / 480.0f, 0.5f, 50.0f);
+
+	//The Camera Matrices are now defined in the camera class (mainCamera)
+
+	XMMATRIX CamView = mainCamera.getCamView();
+	XMMATRIX CamProjection = mainCamera.getCamProjection();
 	XMMATRIX identityM = XMMatrixIdentity();
 	XMMATRIX WorldInv = XMMatrixInverse(nullptr, XMMatrixIdentity());
 
@@ -691,42 +687,38 @@ void RenderEngine::Render(){
 // UPDATES
 
 void RenderEngine::Update(float dt){
-	Input theInput;
-	theInput.initInput(this->hInstance, hWindow);
-	int input = 0;
-	bool jump = false;
-	input = theInput.detectInput(hWindow);
-	jump = theInput.detectJump(hWindow);
+		Input theInput;
+		theInput.initInput(this->hInstance, hWindow);
+		int input = 0;
+		bool jump = false;
+		input = theInput.detectInput(hWindow);
+		jump = theInput.detectJump(hWindow);
 
-	if (input == 0)
-	{
-		theCharacter->momentum = 0;
+		theCollision.TestCollision(gamePlatforms);
 
-	}
+		if (input == 1 && theCollision.leftValid() == true)
+		{
+			this->theCharacter->Move(false); //left
+		}
 
-	if (input == 1)
-	{
-		this->theCharacter->Move(false);
-	}
+		else if (input == 2)
+		{
+			this->theCharacter->Move(true); //right
 
-	else if (input == 2)
-	{
-		this->theCharacter->Move(true);
+		}
 
-	}
+		else
+			this->theCharacter->momentum = 0;
 
-	if (jump && thePhysics.onPlatform)
-	{
-		this->thePhysics.Jump(theCharacter);
-		thePhysics.onPlatform = false;
-	}
-	/*for each (Platform var in gamePlatforms)
-	{
-		thePhysics.onPlatform = theCharacter->TestIntersect(var);
-	}*/
-	//this->theCharacter->Move(true);
-	thePhysics.Gravitation(theCharacter);
-	theCharacter->CalculateWorld();
+		if (jump && theCollision.isGrounded() == true) //om grounded och man har klickat in jump
+		{
+			this->thePhysics.Jump(theCollision, theCharacter);
+			thePhysics.onPlatform = false;
+		}
+
+		thePhysics.Gravitation(theCollision, theCharacter);
+		theCharacter->CalculateWorld();
+	
 
 	// Update Lights
 	camPos = XMFLOAT4(camxPos, 4.0f, -10.0f, 1.0f);
@@ -768,24 +760,28 @@ void RenderEngine::ImportObj(char* geometryFileName, char* materialFileName, ID3
 	OutputDebugStringA("\n");
 	if (player)
 	{
-		theCharacter = new PlayerObject(*objectTest.GetVertexBuffer(), XMFLOAT3(0, 0, 0), true, false, BoundingOrientedBox(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1), XMFLOAT4(1, 1, 1, 1)));
+		theCharacter = new PlayerObject(*objectTest.GetVertexBuffer(), XMFLOAT3(0, 9, 9), true, false, BoundingBox(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1)));
+		theCharacter->CreateBBOXVertexBuffer(gDevice);
 		theCharacter->nrElements = objectTest.GetNrElements();
+		Collision tempC(theCharacter);
+		theCollision = tempC;
 		//gameObjects.push_back(*theCharacter);
 	}
 
 	else
 	{
 		Platform testPlatform(false, objectTest.tempVerts, *objectTest.GetVertexBuffer(), XMFLOAT3(0, 0, 0), true, true, *objectTest.theBoundingBox);
+		testPlatform.CreateBBOXVertexBuffer(gDevice);
 		testPlatform.nrElements = objectTest.GetNrElements();
 		gamePlatforms.push_back(testPlatform);
 	}
-	
+
 	//testObject.ObjName = objectTest.GetName();
 	//Fill buffers
 	//testObject.gameObjectIndex = gameObjectIndex; //används förtillfället vid frustum contains checken
 	//gameObjectIndex++;
 	//testObject.gVertexBuffer = *objectTest.GetVertexBuffer();
-	
+
 
 	//testObject.verteciesPos = objectTest.GetVertexPositions();
 	//testObject.verteciesIndex = objectTest.GetIndecies();
@@ -794,7 +790,7 @@ void RenderEngine::ImportObj(char* geometryFileName, char* materialFileName, ID3
 	//testObject.verteciesPosZ = objectTest.GetVerticiesZ();
 
 
-	
+
 
 }
 

@@ -44,6 +44,8 @@ public:
 		this->vertexBuffer = b;
 	}
 
+	GameObject(){}
+
 	~GameObject(){
 		//vertexBuffer->Release();
 		//indexBuffer->Release();
