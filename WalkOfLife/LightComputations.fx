@@ -26,14 +26,14 @@ struct MatInfo
 	float4	Diffuse;
 	float4	Specular;
 	float	SpecPow;
-	bool	UseTexture;
+	int	UseTexture;
 	float2	Padding;
 };
 
 cbuffer MaterialProperties : register(b0)
 {
 	MatInfo Material;
-}
+};
 
 struct LightingResult
 {

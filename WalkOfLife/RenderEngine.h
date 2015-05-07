@@ -74,6 +74,11 @@ public:
 	float camyPos;
 
 
+	//Material Shit
+	ID3D11Buffer* matConstBuff;
+	MaterialProperties matProperties;
+
+
 	//Import Functions
 	void ImportObj(char* geometryFileName, char* materialFileName, ID3D11Device* gDev, bool player);// , bool isStatic, XMMATRIX startPosMatrix);
 	//Struct for objLoader
@@ -136,7 +141,8 @@ protected:
 	ID3D11DeviceContext* gDeviceContext = nullptr;
 	ID3D11RenderTargetView* gBackRufferRenderTargetView = nullptr;
 	IDXGISwapChain* gSwapChain = nullptr;
-	ID3D11DepthStencilView* gdepthStencilView = nullptr;
+	ID3D11DepthStencilView* gDepthStencilView = nullptr;
+	ID3D11DepthStencilState* gDepthStencilState = nullptr;
 	ID3D11Texture2D* depthStencilBuffer = nullptr;
 
 	ID3D11Buffer* gVertexBuffer = nullptr;
@@ -151,5 +157,6 @@ protected:
 	ID3D11VertexShader* gVertexShader = nullptr;
 	ID3D11PixelShader* gPixelShader = nullptr;
 	ID3D11GeometryShader* gGeometryShader = nullptr;
+
 
 };

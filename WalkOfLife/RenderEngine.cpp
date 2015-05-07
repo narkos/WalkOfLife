@@ -91,19 +91,19 @@ bool RenderEngine::Init(){
 
 
 
-	testLight[0] = LightClass(l_Directional, XMFLOAT3(0.0f, -1.0f, 0.0f), true, true);
-	testLight[0].lightObject.Color = XMFLOAT4(Colors::Purple);
+	testLight[0] = LightClass(l_Directional, XMFLOAT3(1.0f, 1.0f, -5.0f), true, true);
+	testLight[0].lightObject.Color = XMFLOAT4(Colors::White);
 	/*testLight[0].ToggleActive();*/
 
 	LightClass snoppe(l_Point, XMFLOAT3(1.0f, 1.0f, 0.0f), true, true);
 
 	testLight[1] = snoppe;
 	snoppe.lightObject.Type = 2;
-	testLight[1].lightObject.Position = XMFLOAT4(-4.0f, -10.0f, 50.0f, 1.0f);
-	testLight[1].lightObject.Color = XMFLOAT4(Colors::White);
+	testLight[1].lightObject.Position = XMFLOAT4(-4.0f, 8.0f, 1.0f, 1.0f);
+	testLight[1].lightObject.Color = XMFLOAT4(Colors::LightGoldenrodYellow);
 	testLight[1].lightObject.AttConst = 1.0f;
-	testLight[1].lightObject.AttLinear = 0.001f;
-	testLight[1].lightObject.AttQuadratic = 0.00001f;
+	testLight[1].lightObject.AttLinear = 0.08f;
+	testLight[1].lightObject.AttQuadratic = 0.00000f;
 	//testLight[1].ToggleActive();
  	globalAmb = XMFLOAT4(Colors::Black);
 
@@ -116,6 +116,14 @@ bool RenderEngine::Init(){
 	lbuffDesc.ByteWidth = sizeof(LightProperties);
 
 	HRESULT hr = gDevice->CreateBuffer(&lbuffDesc, NULL, &lightConstBuff);
+
+
+	// Material Buffers Init
+	ZeroMemory(&lbuffDesc, sizeof(lbuffDesc));
+	lbuffDesc.ByteWidth = sizeof(MaterialProperties);
+	hr = gDevice->CreateBuffer(&lbuffDesc, NULL, &matConstBuff);
+
+
 
 	return true; //om båda funkade så returnera true (y)
 }
@@ -332,19 +340,19 @@ void RenderEngine::CreatePlaneData(){
 	}
 	PlaneVertices[4] =
 	{
-		-1.8f, -1.8f, 0.9f, //v0 pos
+		-1.8f, -1.8f, -0.9f, //v0 pos
 		0.0f, 1.0f,
 		0.0f, 0.0f, -1.0f, //n0
 
-		-1.8f, 1.8f, 0.9f, //v1
+		-1.8f, 1.8f, -0.9f, //v1
 		0.0f, 0.0f,
 		0.0f, 0.0f, -1.0f,  //n1
 
-		1.8f, -1.8f, 0.9f, //v2
+		1.8f, -1.8f, -0.9f, //v2
 		1.0f, 1.0f,
 		0.0f, 0.0f, -1.0f,  //n2
 
-		1.8f, 1.8f, 0.9f, //v3
+		1.8f, 1.8f, -0.9f, //v3
 		1.0f, 0.0f,
 		0.0f, 0.0f, -1.0f,
 
@@ -430,11 +438,40 @@ bool RenderEngine::InitDirect3D(HWND hWindow){
 		depthStencilDesc.MiscFlags = 0;
 
 		HRESULT hr1 = gDevice->CreateTexture2D(&depthStencilDesc, NULL, &depthStencilBuffer);
-		HRESULT hr2 = gDevice->CreateDepthStencilView(depthStencilBuffer, NULL, &gdepthStencilView);
+		
 
+		D3D11_DEPTH_STENCIL_DESC dsDesc;
+		//Depth test settings
+		dsDesc.DepthEnable = true;
+		dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
+		//Stencil tests
+		dsDesc.StencilEnable = true;
+		dsDesc.StencilReadMask = 0xFF;
+		dsDesc.StencilWriteMask = 0xFF;
+		//Stencil operations - Pixel Front Facing
+		dsDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		dsDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+		dsDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		dsDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+		//Stencil operations - Pixel Back Facing
+		dsDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+		dsDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+		dsDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+		dsDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+		HRESULT hr3 = gDevice->CreateDepthStencilState(&dsDesc, &gDepthStencilState);
+		gDeviceContext->OMSetDepthStencilState(gDepthStencilState, 1);
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+		descDSV.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		descDSV.Texture2D.MipSlice = 0;
+
+		HRESULT hr2 = gDevice->CreateDepthStencilView(depthStencilBuffer, &descDSV, &gDepthStencilView);
 
 		// set the render target as the back buffer
-		gDeviceContext->OMSetRenderTargets(1, &gBackRufferRenderTargetView, gdepthStencilView);
+		gDeviceContext->OMSetRenderTargets(1, &gBackRufferRenderTargetView, gDepthStencilView);
 
 		return true; //returnerar att den HAR klarat av att skapa device och swapchain
 	}
@@ -503,9 +540,10 @@ void RenderEngine::Render(){
 	UINT32 vertexSize = sizeof(float) * 8;
 	UINT32 offset = 0;
 	rot += 0.01;
-	float clearColor[] = { 0.15f,0.6f,1.0f, 0.8f };
+	float clearColor[] = { 0.15f,0.6f,1.0f, 0.2f };
+	gDeviceContext->OMSetBlendState(0, 0, 0xffffffff);
 	gDeviceContext->ClearRenderTargetView(gBackRufferRenderTargetView, clearColor);
-	gDeviceContext->ClearDepthStencilView(gdepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	gDeviceContext->ClearDepthStencilView(gDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	
 	camxPos = theCharacter->xPos;
 	camyPos = theCharacter->yPos;
@@ -513,12 +551,11 @@ void RenderEngine::Render(){
 	//WORLD
 	XMMATRIX YRotation = XMMatrixRotationY(rot);
 	// Sets camera pos and angle
-	XMMATRIX CamView = XMMatrixLookAtLH(XMVectorSet(camxPos, 4.0f, -10.0f, 1.0f), XMVectorSet(camxPos, camyPos, 0.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0, 0.0f));
+	XMMATRIX CamView = XMMatrixLookAtLH(XMVectorSet(camxPos, 4.0f, -5.0f, 1.0f), XMVectorSet(camxPos, camyPos, 0.0f, 1.0f), XMVectorSet(0.0f, 1.0f, 0.0, 0.0f));
 	XMMATRIX CamProjection = XMMatrixPerspectiveFovLH(3.14f*(0.45f), 640.0f / 480.0f, 0.5f, 50.0f);
 	XMMATRIX identityM = XMMatrixIdentity();
 	XMMATRIX WorldInv = XMMatrixInverse(nullptr, XMMatrixIdentity());
 
-	//identityM = XMMatrixTranslation(rot, 1, 1);
 	World perObjCBData;
 
 	XMMATRIX WVP;
@@ -534,13 +571,10 @@ void RenderEngine::Render(){
 	
 	gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &perObjCBData, 0, 0);
 	gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
+	gDeviceContext->IASetVertexBuffers(0, 1, &gVertexBuffer, &vertexSize, &offset);
 	
-
-	gDeviceContext->PSSetConstantBuffers(1, 1, &lightConstBuff);
-	
-
-	////////////LIGHTS
-
+	ID3D11Buffer *pShaderBuffers[2] = { matConstBuff, lightConstBuff };
+	gDeviceContext->PSSetConstantBuffers(0, 2, pShaderBuffers);
 
 	//RENDER OBJ FILES
 
@@ -557,12 +591,22 @@ void RenderEngine::Render(){
 		gDeviceContext->PSSetShader(gPixelShader, nullptr, 0);
 		
 		var.CalculateWorld();
+		var.material = MatPresets::Emerald;
+		var.material.SpecPow = 38.0f;
+		
+		matProperties.Material = var.material;
+
+		gDeviceContext->UpdateSubresource(matConstBuff, 0, nullptr, &matProperties, 0, 0);
+		
+		
+
 		XMStoreFloat4x4(&perObjCBData.InvWorld, XMMatrixTranspose(XMMatrixInverse(nullptr, var.world)));
 		XMStoreFloat4x4(&perObjCBData.WorldSpace, XMMatrixTranspose(var.world));
 		WVP = XMMatrixIdentity();
 		WVP = var.world * CamView *CamProjection;
 
 		XMStoreFloat4x4(&perObjCBData.WVP, XMMatrixTranspose(WVP));
+
 
 		gDeviceContext->UpdateSubresource(gWorld, 0, NULL, &perObjCBData, 0, 0);
 		gDeviceContext->VSSetConstantBuffers(0, 1, &gWorld);
