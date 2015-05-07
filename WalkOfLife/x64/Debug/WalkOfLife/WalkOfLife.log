@@ -1,4 +1,4 @@
-﻿Build started 2015-05-07 15:19:20.
+﻿Build started 2015-05-07 15:29:50.
      1>Project "D:\SKAPA\-GameProjects\Litet Spelprojekt BTH\Engine\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\WalkOfLife\\" /Fd"x64\Debug\WalkOfLife\vc120.pdb" /Gd /TP /errorReport:prompt RenderEngine.cpp
@@ -31,4 +31,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.97
+Time Elapsed 00:00:01.91

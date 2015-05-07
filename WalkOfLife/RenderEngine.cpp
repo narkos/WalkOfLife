@@ -92,10 +92,10 @@ bool RenderEngine::Init(){
 
 	testLight[1] = snoppe;
 	snoppe.lightObject.Type = 2;
-	testLight[1].lightObject.Position = XMFLOAT4(-4.0f, 8.0f, 1.0f, 1.0f);
+	testLight[1].lightObject.Position = XMFLOAT4(4.0f, -8.0f, 1.0f, 1.0f);
 	testLight[1].lightObject.Color = XMFLOAT4(Colors::White);
 	testLight[1].lightObject.AttConst = 1.0f;
-	testLight[1].lightObject.AttLinear = 0.000f;
+	testLight[1].lightObject.AttLinear = 0.0008f;
 	testLight[1].lightObject.AttQuadratic = 0.00000f;
 	//testLight[1].ToggleActive();
  	globalAmb = XMFLOAT4(Colors::Black);

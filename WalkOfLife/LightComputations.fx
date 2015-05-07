@@ -60,14 +60,14 @@ cbuffer LightProperties : register(b1)
 float4 calcDiffuse(Light light, float3 L, float4 N)
 {
 	float diffCalc;
-	diffCalc = max(0, dot(L, N));	//Returns 0 if surface isn't facing camera.
+	diffCalc = max(0, dot(N,L));	//Returns 0 if surface isn't facing camera.
 	return light.Color * diffCalc;
 }
 
 float4 calcSpecular(Light light, float3 V, float3 L, float4 N)
 {
 	//Phong
-	float3 R = normalize(reflect(-L, N));
+	float3 R = normalize(reflect(L, N));
 	float RdotV = max(0, dot(N, V));
 
 	// Blin Phong
