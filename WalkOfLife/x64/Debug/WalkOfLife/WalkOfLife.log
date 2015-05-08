@@ -1,33 +1,52 @@
-﻿Build started 2015-05-07 15:52:20.
+﻿Build started 2015-05-08 11:08:16.
      1>Project "C:\Users\Simon\Downloads\Programmering\WalkOfLife\WalkOfLife\WalkOfLife.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\WalkOfLife\\" /Fd"x64\Debug\WalkOfLife\vc120.pdb" /Gd /TP /errorReport:prompt Collision.cpp Input.cpp Obj.cpp Physics.cpp PlayerObject.cpp RenderEngine.cpp WinMain.cpp
-         Obj.cpp
-     1>Obj.cpp(164): warning C4267: '=' : conversion from 'size_t' to 'UINT', possible loss of data
-     1>Obj.cpp(172): warning C4267: '=' : conversion from 'size_t' to 'UINT', possible loss of data
-     1>Obj.cpp(221): warning C4056: overflow in floating-point constant arithmetic
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /sdl /Od /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\WalkOfLife\\" /Fd"x64\Debug\WalkOfLife\vc120.pdb" /Gd /TP /errorReport:prompt Collision.cpp Input.cpp Light.cpp Physics.cpp PlayerObject.cpp RenderEngine.cpp WinMain.cpp
+         RenderEngine.cpp
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\GameObject.h(83): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\CollisionObject.h(71): warning C4267: '=' : conversion from 'size_t' to 'UINT', possible loss of data
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\PlayerObject.h(82): warning C4305: '=' : truncation from 'double' to 'float'
+         C:\Program Files (x86)\Windows Kits\8.1\Include\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+     1>RenderEngine.cpp(29): warning C4244: '=' : conversion from 'float' to 'UINT', possible loss of data
+     1>RenderEngine.cpp(30): warning C4244: '=' : conversion from 'float' to 'UINT', possible loss of data
+     1>RenderEngine.cpp(182): warning C4244: '=' : conversion from 'UINT' to 'FLOAT', possible loss of data
+     1>RenderEngine.cpp(183): warning C4244: '=' : conversion from 'UINT' to 'FLOAT', possible loss of data
+     1>RenderEngine.cpp(208): warning C4244: '=' : conversion from 'float' to 'UINT', possible loss of data
+     1>RenderEngine.cpp(558): warning C4305: '+=' : truncation from 'double' to 'float'
+         Light.cpp
          Generating Code...
-     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\obj.cpp(220): warning C4756: overflow in constant arithmetic
-     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\obj.cpp(220): warning C4756: overflow in constant arithmetic
-     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\obj.cpp(220): warning C4756: overflow in constant arithmetic
-     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\obj.cpp(221): warning C4756: overflow in constant arithmetic
-     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\obj.cpp(221): warning C4756: overflow in constant arithmetic
-     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\obj.cpp(221): warning C4756: overflow in constant arithmetic
-     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\obj.cpp(220): warning C4756: overflow in constant arithmetic
-     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\obj.cpp(221): warning C4756: overflow in constant arithmetic
          Compiling...
+         WinMain.cpp
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\GameObject.h(83): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\CollisionObject.h(71): warning C4267: '=' : conversion from 'size_t' to 'UINT', possible loss of data
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\PlayerObject.h(82): warning C4305: '=' : truncation from 'double' to 'float'
+         C:\Program Files (x86)\Windows Kits\8.1\Include\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+         PlayerObject.cpp
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\GameObject.h(83): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\CollisionObject.h(71): warning C4267: '=' : conversion from 'size_t' to 'UINT', possible loss of data
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\PlayerObject.h(82): warning C4305: '=' : truncation from 'double' to 'float'
+     1>PlayerObject.cpp(10): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>PlayerObject.cpp(23): warning C4305: '+=' : truncation from 'double' to 'float'
+         Physics.cpp
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\GameObject.h(83): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\CollisionObject.h(71): warning C4267: '=' : conversion from 'size_t' to 'UINT', possible loss of data
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\PlayerObject.h(82): warning C4305: '=' : truncation from 'double' to 'float'
+     1>Physics.cpp(6): warning C4305: '=' : truncation from 'double' to 'float'
+     1>Physics.cpp(20): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>Physics.cpp(31): warning C4305: '=' : truncation from 'double' to 'float'
+     1>Physics.cpp(37): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>Physics.cpp(51): warning C4305: '=' : truncation from 'double' to 'float'
+         Input.cpp
+         C:\Program Files (x86)\Windows Kits\8.1\Include\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\GameObject.h(83): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\CollisionObject.h(71): warning C4267: '=' : conversion from 'size_t' to 'UINT', possible loss of data
+     1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\PlayerObject.h(82): warning C4305: '=' : truncation from 'double' to 'float'
          Collision.cpp
      1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\GameObject.h(83): warning C4305: 'argument' : truncation from 'double' to 'float'
      1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\CollisionObject.h(71): warning C4267: '=' : conversion from 'size_t' to 'UINT', possible loss of data
      1>c:\users\simon\downloads\programmering\walkoflife\walkoflife\PlayerObject.h(82): warning C4305: '=' : truncation from 'double' to 'float'
      1>Collision.cpp(37): warning C4101: 'yValue' : unreferenced local variable
          Generating Code...
-         Skipping... (no relevant changes detected)
-         WinMain.cpp
-         RenderEngine.cpp
-         PlayerObject.cpp
-         Physics.cpp
-         Input.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Simon\Downloads\Programmering\WalkOfLife\x64\Debug\WalkOfLife.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Simon\Downloads\Programmering\WalkOfLife\x64\Debug\WalkOfLife.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Simon\Downloads\Programmering\WalkOfLife\x64\Debug\WalkOfLife.lib" /MACHINE:X64 x64\Debug\WalkOfLife\Camera.obj
          x64\Debug\WalkOfLife\Collision.obj
@@ -46,4 +65,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:05.06
+Time Elapsed 00:00:18.26

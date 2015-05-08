@@ -760,6 +760,14 @@ void RenderEngine::Update(float dt){
 
 		thePhysics.Gravitation(theCollision, theCharacter);
 		theCharacter->CalculateWorld();
+
+		//förflyttar alla nonstatic objekt längs deras intervalbana (sin)
+		for each (GameObject var in gamePlatforms)
+		{
+			if (var.GetStatic() == false){
+				var.PatrolInterval(gTimer.TotalTime());
+			}
+		}
 	
 
 	// Update Lights
@@ -812,7 +820,7 @@ void RenderEngine::ImportObj(char* geometryFileName, char* materialFileName, ID3
 
 	else
 	{
-		Platform testPlatform(false, objectTest.tempVerts, *objectTest.GetVertexBuffer(), XMFLOAT3(0, 0, 0), true, true, *objectTest.theBoundingBox);
+		Platform testPlatform(false, objectTest.tempVerts, *objectTest.GetVertexBuffer(), XMFLOAT3(0, 0, 0), true, false, *objectTest.theBoundingBox);
 		testPlatform.CreateBBOXVertexBuffer(gDevice);
 		testPlatform.nrElements = objectTest.GetNrElements();
 		gamePlatforms.push_back(testPlatform);

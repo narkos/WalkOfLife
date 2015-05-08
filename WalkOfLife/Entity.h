@@ -24,6 +24,10 @@ protected:
 	XMMATRIX rot;
 	XMMATRIX scale;
 
+
+	float xInterval, yInterval;
+	XMFLOAT3 currIntervalPosition;
+
 public:
 	XMMATRIX pos;
 	float xPos;
@@ -66,5 +70,13 @@ public:
 	}
 
 	bool GetActive(){ return isActive; }
+	bool GetStatic(){ return isStatic; }
+
+	void PatrolInterval(float time){
+		currIntervalPosition.x = sin(time) * xInterval;
+		currIntervalPosition.y = sin(time) * yInterval;
+		currIntervalPosition.z = 0;
+		Translate(currIntervalPosition.x, currIntervalPosition.y, currIntervalPosition.z);
+	}
 
 };
